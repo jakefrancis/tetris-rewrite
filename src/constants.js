@@ -18,7 +18,7 @@ const paleColors = [
   "#fbaed2",
 ];
 const backgroundColor = "#343434";
-let colors = [
+const  basicColors = [
   "#DE6B48",
   "#058ED9",
   "#FFBC42",
@@ -27,7 +27,8 @@ let colors = [
   "#EF7674",
   "#780116",
 ];
-colors = paleColors;
+const colors = paleColors;
+
 
 const pieces = [
   {
@@ -130,19 +131,13 @@ const pieces = [
   },
 ];
 
-let gameState = 0;
-const startScreen = 0;
-const gameRunning = 1;
-const gamePaused = 2;
-
-//button pressed for control
-let dir = "";
-let tempDir = "";
-
 //frame rate
 const fps = 60;
 
 //sizes of the blocks and wells
 const pxSize = 20;
-const wellWidth = pxSize * 10;
 const wellHeight = pxSize * 30;
+const wellWidth = pxSize * 10;
+
+
+export {colors,backgroundColor,pieces,pxSize,wellHeight,wellWidth}

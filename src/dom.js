@@ -1,8 +1,6 @@
-const wellWidth = 200
-const wellHeight = 600
-const backgroundColor = 'black'
-let level = 1
-let numberOfLines = 0
+
+import {wellWidth,wellHeight,backgroundColor} from './constants.js'
+
 
 let body = document.querySelectorAll("body");
 let container = document.createElement("div");
@@ -46,11 +44,11 @@ let lineTotal = document.createElement("h1");
 
 pointTotal.setAttribute("id", "pointTotal");
 pointTotal.style.paddingTop = "50px";
-pointTotal.textContent = "Points: " + points;
+pointTotal.textContent = "Points: " + 0;
 levelTotal.style.paddingTop = "1em";
-levelTotal.textContent = "Level: " + level;
+levelTotal.textContent = "Level: " + 0;
 lineTotal.style.paddingTop = "1em";
-lineTotal.textContent = "Lines: " + numberOfLines;
+lineTotal.textContent = "Lines: " + 0;
 let nextBlock = document.createElement("canvas");
 info.appendChild(nextBlock);
 info.appendChild(pointTotal);
