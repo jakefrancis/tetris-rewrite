@@ -79,7 +79,7 @@ const getIntialPieceCoords = (piece) => {
   return coords
 }
 
-let activePiece = {...pieces[0]}
+let activePiece = {...pieces[5]}
 let gamePiece = activePiece.shape
 let gameSize = activePiece.gridSize
 let piece = getIntialPieceCoords(activePiece)
@@ -87,7 +87,6 @@ console.log(piece)
 
 
 const rotateGamePiece = (gamePiece, size) => {
-
       let rotatedArray = []
       let start = (size * size) - size
       let origin = start
@@ -117,7 +116,7 @@ const rotate = (pieceToRotate, count = 0) => {
   let rotatedPiece = getIntialPieceCoords(newPiece)
   console.log('first',rotatedPiece)
 
-  let freeRotation = checkCollion(rotatedPiece)
+  let freeRotation = verifyNoCollision(rotatedPiece)
 
   while(!freeRotation){
     console.log(rotations)
@@ -125,7 +124,7 @@ const rotate = (pieceToRotate, count = 0) => {
     newPiece.shape = newShape
     rotatedPiece = getIntialPieceCoords(newPiece)
 
-    freeRotation = checkCollion(rotatedPiece)
+    freeRotation = verifyNoCollision(rotatedPiece)
     rotations = rotations + 1
     if(rotations > 3){
       break;
@@ -151,35 +150,35 @@ gameWell['6,25'] = new Block(6,25, 'red')
 
 
 
-const movePiece = (piece,direction,ghost = false) => {
-  let prev = {...piece}
- 
-  let newPiece = {}
-  for(let block in piece){
-    let vecX = piece[block].x + direction.x
-    let vecY = piece[block].y + direction.y
+const movePiece = (piece,direction,ghost = false,autoDrop = false) => {
+  let prev = {...piece} 
+  let newPiece = createPieceFromMove(piece,direction)
+  if(verifyNoCollision(newPiece)){
 
-    let square = new Block(vecX,vecY,piece[block].color)    
-    let coords = `${vecX},${vecY}`
-    newPiece[coords] = square
-  }
-  if(checkCollion(newPiece)){
-    if(!ghost){
       pieceCoords.x += direction.x
       pieceCoords.y += direction.y
-    }
-    
+  
     return newPiece
   }
   else{
-    if(ghost) {
-      bottom = false
-    }
     return prev
   }
 }
 
-const checkCollion = (piece) => {
+
+const createPieceFromMove = (piece, direction) => {
+  let newPiece = {}
+  for(let block in piece){
+    let vecX = piece[block].x + direction.x
+    let vecY = piece[block].y + direction.y
+    let square = new Block(vecX,vecY,piece[block].color)    
+    let coords = `${vecX},${vecY}`
+    newPiece[coords] = square
+  }
+  return newPiece
+}
+
+const verifyNoCollision = (piece) => {
   for(let block in piece){
       if(gameWell[block] !== null){
         return false
@@ -228,8 +227,7 @@ const keyHandler = (event) => {
 
 
 let timer = 0
-const moveDown = (piece) => {
-  
+const moveDown = (piece) => {  
   if(timer > 30){
     let down =  {x: 0, y: 1}
     piece = movePiece(piece, down)
@@ -253,30 +251,30 @@ const drawWell = (well) => {
 let ghostPiece = {...piece}
 let bottom = true
 
-const dropGhostPiece = () => {
 
-}
 
-const calcGhost = (ghostPiece) => {
-  let down =  {x: 0, y: 1}
-  while(bottom){
-    console.log(bottom)
-    ghostPiece = movePiece(ghostPiece,down,true)
+const dropGhostPiece = (ghostPiece) => {
+  //copy the piece object provide to avoid mutation
+  let copy = {...ghostPiece}
+  let prev;
+  //down vector
+  let down =  {x: 0, y: 1} 
+  //keep moving the ghostPiece down the well until you find a collision
+  while(verifyNoCollision(copy)){
+    prev = {...copy}
+    copy = createPieceFromMove(copy,down)
   }
-  return ghostPiece
+  //return the previous position prior to finding a collison. 
+    return prev
   
 }
-
-
-
-
 
 
 const gameLoop = () => {
   ctx.clearRect(0,0,canvasWidth, canvasHeight)
   
-  ghostPiece = calcGhost(ghostPiece)
-  drawPiece(ghostPiece, true)
+  ghostPiece = dropGhostPiece(ghostPiece)
+  drawPiece(ghostPiece,true)
   drawPiece(piece) 
   drawWell(gameWell)
   piece = moveDown(piece)
