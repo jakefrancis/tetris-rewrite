@@ -136,8 +136,8 @@ const fps = 60;
 
 //sizes of the blocks and wells
 const pxSize = 20;
-const wellHeight = pxSize * 30;
-const wellWidth = pxSize * 10;
+const wellHeight = 30;
+const wellWidth = 10;
 
 
 export {colors,backgroundColor,pieces,pxSize,wellHeight,wellWidth}
