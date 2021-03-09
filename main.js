@@ -28,13 +28,14 @@ import {body,container,canvas,
 
 //blocks displayed on screen
   class Block {
-      constructor(vec,color){
-        this.pos = vec
+      constructor(x,y,color){
+        this.x = x
+        this.y = y
         this.color = color
       }
-      draw(can) {
-        can.fillStyle = this.color
-        can.fillRect(this.pos.x * pxSize, this.pos.y * pxSize, pxSize, pxSize)
+      draw(can,ghost = false) {
+        can.fillStyle = !ghost ? this.color : 'white' 
+        can.fillRect(this.x * pxSize, this.y * pxSize, pxSize, pxSize)
       }
   }
 
@@ -54,7 +55,7 @@ let gameWell = produceWell(wellWidth,wellHeight)
 
 console.log(pieces)
 
-let pieceCoords = new Vector(3,1)
+let pieceCoords = {x: 3, y: 1}
 
 
 const getIntialPieceCoords = (piece) => {
@@ -65,9 +66,9 @@ const getIntialPieceCoords = (piece) => {
 
   for(let i = 0; i < totalSize; i++){
     if(piece.shape[i] !== '-'){
-      let vec = new Vector(x,y)
-      vec.sum(pieceCoords)
-      coords[`${vec.x},${vec.y}`] = new Block(vec,piece.color)
+      let vecX = x + pieceCoords.x
+      let vecY = y + pieceCoords.y
+      coords[`${vecX},${vecY}`] = new Block(vecX,vecY,piece.color)
     }
     x++
     if(x === piece.gridSize){
@@ -78,10 +79,10 @@ const getIntialPieceCoords = (piece) => {
   return coords
 }
 
-let activePiece = {...pieces[2]}
-let gamePiece = [...pieces[2].shape]
-let gameSize = pieces[2].gridSize
-let piece = getIntialPieceCoords({...pieces[2]})
+let activePiece = {...pieces[0]}
+let gamePiece = activePiece.shape
+let gameSize = activePiece.gridSize
+let piece = getIntialPieceCoords(activePiece)
 console.log(piece)
 
 
@@ -114,17 +115,21 @@ const rotate = (pieceToRotate, count = 0) => {
   newPiece.shape = newShape
   let rotations = 0
   let rotatedPiece = getIntialPieceCoords(newPiece)
+  console.log('first',rotatedPiece)
 
   let freeRotation = checkCollion(rotatedPiece)
-  console.log(freeRotation)
+
   while(!freeRotation){
+    console.log(rotations)
     newShape = rotateGamePiece(newPiece.shape, newPiece.gridSize)
     newPiece.shape = newShape
     rotatedPiece = getIntialPieceCoords(newPiece)
-    console.log(rotatedPiece)
+
     freeRotation = checkCollion(rotatedPiece)
     rotations = rotations + 1
-    console.log(rotations)
+    if(rotations > 3){
+      break;
+    }
   }
   
   activePiece = newPiece
@@ -132,26 +137,44 @@ const rotate = (pieceToRotate, count = 0) => {
 }
 
 
-gameWell['6,25'] = new Block(new Vector(6,25), 'red')
+const deepCopyPiece = (piece) => {
+    let copy = {}
+    for(let block in piece){
+      copy[block] ={...piece[block]}
+    }
+    console.log(copy)
+    return copy
+}
+
+
+gameWell['6,25'] = new Block(6,25, 'red')
 
 
 
-const movePiece = (piece,direction) => {
+const movePiece = (piece,direction,ghost = false) => {
   let prev = {...piece}
  
   let newPiece = {}
   for(let block in piece){
-    let vec = new Vector(piece[block].pos.x,piece[block].pos.y)
-    vec.sum(direction)
-    let square = new Block(vec,piece[block].color)    
-    let coords = `${square.pos.x},${square.pos.y}`
+    let vecX = piece[block].x + direction.x
+    let vecY = piece[block].y + direction.y
+
+    let square = new Block(vecX,vecY,piece[block].color)    
+    let coords = `${vecX},${vecY}`
     newPiece[coords] = square
   }
   if(checkCollion(newPiece)){
-    pieceCoords.sum(direction)
+    if(!ghost){
+      pieceCoords.x += direction.x
+      pieceCoords.y += direction.y
+    }
+    
     return newPiece
   }
   else{
+    if(ghost) {
+      bottom = false
+    }
     return prev
   }
 }
@@ -165,9 +188,9 @@ const checkCollion = (piece) => {
   return true
 }
 
-const drawPiece = (piece) => {
+const drawPiece = (piece, ghost = false) => {
     for(let block in piece){
-      piece[block].draw(ctx)
+      piece[block].draw(ctx,ghost)
     }
 }
 
@@ -176,23 +199,29 @@ const keyHandler = (event) => {
   
   switch(key){
     case 'ArrowDown':
-      let down = new Vector(0,1)
+      let down =  {x: 0, y: 1}
       piece = movePiece(piece, down)
       timer = 0
       break;
     case 'ArrowRight':
-      let right = new Vector(1,0)
+      let right =  {x: 1, y: 0}
       piece = movePiece(piece, right)
+      bottom = true
+      ghostPiece = {...piece}
       break;
     case 'ArrowLeft':
-        let left = new Vector(-1,0)
+        let left =  {x: -1, y: 0}
         piece =  movePiece(piece, left)
+        bottom = true
+        ghostPiece = {...piece}
       break;
     case ' ':
         piece = rotate(activePiece)
+        bottom = true
+        ghostPiece = {...piece}
          break;
     default:
-      let idle = new Vector(0,0)
+      let idle = {x: 0, y: 0}
       piece = movePiece(piece, idle)
   }
 }
@@ -202,11 +231,10 @@ let timer = 0
 const moveDown = (piece) => {
   
   if(timer > 30){
-    let down = new Vector(0,1)
+    let down =  {x: 0, y: 1}
     piece = movePiece(piece, down)
     timer = 0
   }
-  console.log(timer)
   timer++
   return piece  
 }
@@ -222,12 +250,34 @@ const drawWell = (well) => {
     }
 }
 
+let ghostPiece = {...piece}
+let bottom = true
+
+const dropGhostPiece = () => {
+
+}
+
+const calcGhost = (ghostPiece) => {
+  let down =  {x: 0, y: 1}
+  while(bottom){
+    console.log(bottom)
+    ghostPiece = movePiece(ghostPiece,down,true)
+  }
+  return ghostPiece
+  
+}
+
+
+
 
 
 
 const gameLoop = () => {
   ctx.clearRect(0,0,canvasWidth, canvasHeight)
-  drawPiece(piece)
+  
+  ghostPiece = calcGhost(ghostPiece)
+  drawPiece(ghostPiece, true)
+  drawPiece(piece) 
   drawWell(gameWell)
   piece = moveDown(piece)
 }
