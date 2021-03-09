@@ -34,7 +34,7 @@ import {body,container,canvas,
         this.color = color
       }
       draw(can,ghost = false) {
-        can.fillStyle = !ghost ? this.color : 'white' 
+        can.fillStyle = !ghost ? this.color : 'rgb(255,255,255,0.3)' 
         can.fillRect(this.x * pxSize, this.y * pxSize, pxSize, pxSize)
       }
   }
