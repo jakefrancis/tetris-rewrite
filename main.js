@@ -53,7 +53,38 @@ const produceWell = (width,height) => {
 
 let gameWell = produceWell(wellWidth,wellHeight)
 
-console.log(pieces)
+const fillBagOfPieces = (pieces,duplicates = 6) => {
+      let bag = []
+      for(let piece of pieces){
+        for(let i = 0; i < duplicates; i++){
+          bag.push({...piece})
+        }
+      }
+      return bag
+}
+
+const checkIfBagEmpty = bag => bag.length === 0
+     
+    
+
+const pickRandomPiece= (bag) => {
+  let randomIndex = Math.floor(Math.random() * bag.length)
+  return bag.splice(randomIndex, 1)[0]
+}
+
+
+
+const fillBagIfEmpty = (bag,pieces,duplicates = 6) => {
+      return bag = checkIfBagEmpty(bag) ? fillBagOfPieces(pieces,duplicates) : bag
+}
+
+
+let pieceBag = [] 
+pieceBag = fillBagIfEmpty(pieceBag,pieces,2)
+console.log(pieceBag)
+console.log(pickRandomPiece(pieceBag))
+console.log(pieceBag)
+
 
 let pieceCoords = {x: 3, y: 1}
 
@@ -78,8 +109,9 @@ const getIntialPieceCoords = (piece) => {
   }
   return coords
 }
+let pickedPiece = pickRandomPiece(pieceBag)
 
-let activePiece = {...pieces[5]}
+let activePiece = pickRandomPiece(pieceBag)
 let gamePiece = activePiece.shape
 let gameSize = activePiece.gridSize
 let piece = getIntialPieceCoords(activePiece)
@@ -103,10 +135,7 @@ const rotateGamePiece = (gamePiece, size) => {
     return rotatedArray
 }
 
-const rotate = (pieceToRotate, count = 0) => {
-
-
-  
+const rotate = (pieceToRotate, count = 0) => { 
   
   let prevShape = [...pieceToRotate.shape]
   let newShape = rotateGamePiece(pieceToRotate.shape,pieceToRotate.gridSize)
@@ -227,15 +256,7 @@ const keyHandler = (event) => {
 
 
 let timer = 0
-const moveDown = (piece) => {  
-  if(timer > 30){
-    let down =  {x: 0, y: 1}
-    piece = movePiece(piece, down)
-    timer = 0
-  }
-  timer++
-  return piece  
-}
+
 
 
 window.onkeydown = keyHandler
@@ -267,6 +288,16 @@ const dropGhostPiece = (ghostPiece) => {
   //return the previous position prior to finding a collison. 
     return prev
   
+}
+
+const moveDown = (piece) => {  
+  if(timer > 30){
+    let down =  {x: 0, y: 1}
+    piece = movePiece(piece, down)
+    timer = 0
+  }
+  timer++
+  return piece  
 }
 
 
