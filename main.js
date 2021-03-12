@@ -61,10 +61,7 @@ const fillBagOfPieces = (pieces,duplicates = 6) => {
         }
       }
       return bag
-}
-
-const checkIfBagEmpty = bag => bag.length === 0
-     
+}     
     
 
 const pickRandomPiece= (bag) => {
@@ -75,7 +72,7 @@ const pickRandomPiece= (bag) => {
 
 
 const fillBagIfEmpty = (bag,pieces,duplicates = 6) => {
-      return bag = checkIfBagEmpty(bag) ? fillBagOfPieces(pieces,duplicates) : bag
+      return bag = bag.length === 0 ? fillBagOfPieces(pieces,duplicates) : bag
 }
 
 
@@ -311,8 +308,13 @@ const dropGhostPiece = (ghostPiece) => {
 const moveDown = (piece) => {  
   if(timer > 30){
     let down =  {x: 0, y: 1}
+    let prevCoords = {...pieceCoords}
     piece = movePiece(piece, down)
-
+    //if the coords are the same that means the piece is no longer moving down,
+    //or to put it simply it collided with something. 
+    if(pieceCoords.x === prevCoords.x && pieceCoords.y === prevCoords.y){
+      console.log('bottom')
+    }
     timer = 0
   }
   timer++
@@ -327,7 +329,7 @@ const gameLoop = () => {
   drawPiece(ghostPiece,true)
   drawPiece(piece) 
   drawWell(gameWell)
-  //piece = moveDown(piece)
+  piece = moveDown(piece)
 }
 
 setInterval(gameLoop, 1000/60);
