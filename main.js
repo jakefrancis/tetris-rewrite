@@ -202,11 +202,6 @@ const wallKick = (piece,freeRotating) => {
   return piece
 }
 
-
-gameWell['6,25'] = new Block(6,25, 'red')
-
-
-
 const movePiece = (piece,direction,ghost = false,autoDrop = false) => {
   let prev = {...piece} 
   let newPiece = createPieceFromMove(piece,direction)
@@ -324,11 +319,11 @@ const moveDown = (piece) => {
     let prevCoords = {...pieceCoords}
     piece = movePiece(piece, down)
     //if the coords are the same that means the piece is no longer moving down,
-    //or to put it simply it collided with something. 
-
+    //or too  put it simply it collided with something. 
     if(pieceCoords.x === prevCoords.x 
       && pieceCoords.y === prevCoords.y){
     storeInWell(piece)
+    gameWell = lineClear(gameWell,wellWidth,wellHeight)
     piece = pickNewPiece(pieceBag)
     }
     timer = 0
@@ -341,7 +336,78 @@ const storeInWell = (piece) => {
     for(let block in piece){
       gameWell[block] = piece[block]
     }
-} 
+}
+
+const lineClear = (well,width,height) => {
+    let linesCleared = 0
+    let widthCount = 0
+    let blockCount = 0
+    let nullCount = 0
+    //if the event of a line clear/s we will copy the well into an array
+    //splice the entire row/s or line/s from the array
+    //insert a new empty line/s at the beginning
+    //then rebuild the well hashmap from the array
+    let wellArray = buildWellArrayFromHash(well,width,height)
+    for(let y = wellArray.length - 1; y >= 0; y--){
+        if(wellArray[y] === null){
+          nullCount++
+          if(nullCount === width){
+            break;
+          }
+        }
+        else{
+          blockCount++
+          if(blockCount === width){
+            linesCleared++
+            wellArray.splice(y,width)
+            for(let i = 0; i < width; i++){
+              wellArray.unshift(null)
+            }
+            y += width
+          }
+        }
+        widthCount++
+        if(widthCount === width){
+          nullCount = 0
+          blockCount = 0
+          widthCount = 0
+      }
+    }
+    if(linesCleared > 0){
+      return rebuildWellHash(wellArray,width,height)
+    }
+    return well
+}
+
+const buildWellArrayFromHash = (well,width,height) => {
+  let wellArray = []
+    for(let y = 0; y < height; y++){
+        for(let x = 0; x < width; x++){
+            wellArray.push(well[`${x},${y}`])
+        }
+    }
+  return wellArray
+}
+
+const rebuildWellHash = (wellArray,width,height) => {
+    let hash = {}
+    let endX =  width - 1
+    let x = 0
+    let y = 0
+    for(let item of wellArray){
+      if(item !== null){
+        item.x = x
+        item.y = y
+      }    
+      hash[`${x},${y}`] = item
+      x++
+      if(x > endX){
+        y++
+        x = 0
+      }
+    }
+  return hash
+}
 
 
 
