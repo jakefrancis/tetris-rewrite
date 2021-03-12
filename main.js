@@ -122,7 +122,6 @@ const rotateGamePiece = (gamePiece, size) => {
       let rotatedArray = []
       let start = (size * size) - size
       let origin = start
-      let count = gamePiece.length
       let counter = 1
       for(let i = 0; i < gamePiece.length; i++){
         rotatedArray.push(gamePiece[start])
@@ -137,25 +136,38 @@ const rotateGamePiece = (gamePiece, size) => {
 
 const rotate = (pieceToRotate, count = 0) => { 
   
+  
   let prevShape = [...pieceToRotate.shape]
   let newShape = rotateGamePiece(pieceToRotate.shape,pieceToRotate.gridSize)
   let newPiece = {...pieceToRotate}
   newPiece.shape = newShape
   let rotations = 0
   let rotatedPiece = getIntialPieceCoords(newPiece)
-  console.log('first',rotatedPiece)
+  console.log(rotatedPiece)
 
   let freeRotation = verifyNoCollision(rotatedPiece)
+  
+  if(pieceToRotate.name !== 'bar'){
+    console.log(pieceToRotate.name)
+    rotatedPiece = wallKick(rotatedPiece, freeRotation)
+    freeRotation = verifyNoCollision(rotatedPiece)
+  }
+  
 
   while(!freeRotation){
     console.log(rotations)
     newShape = rotateGamePiece(newPiece.shape, newPiece.gridSize)
     newPiece.shape = newShape
     rotatedPiece = getIntialPieceCoords(newPiece)
-
     freeRotation = verifyNoCollision(rotatedPiece)
+
+    if(pieceToRotate.name !== 'bar'){
+      console.log(pieceToRotate.name)
+      rotatedPiece = wallKick(rotatedPiece, freeRotation)
+      freeRotation = verifyNoCollision(rotatedPiece)
+    }
     rotations = rotations + 1
-    if(rotations > 3){
+    if(rotations > 3){      
       break;
     }
   }
@@ -164,14 +176,20 @@ const rotate = (pieceToRotate, count = 0) => {
   return rotatedPiece
 }
 
-
-const deepCopyPiece = (piece) => {
-    let copy = {}
-    for(let block in piece){
-      copy[block] ={...piece[block]}
+const wallKick = (piece,freeRotating) => {
+  if(!freeRotating){
+    piece = movePiece(piece, {x:-1,y:0})
+    freeRotating = verifyNoCollision(piece)
+    if(!freeRotating){
+      piece = movePiece(piece, {x: 1,y:0})
+      freeRotating = verifyNoCollision(piece)
+      if(!freeRotating){
+        piece = movePiece(piece, {x:-1,y:0})
+        freeRotating = verifyNoCollision(piece) 
+      }
     }
-    console.log(copy)
-    return copy
+  }  
+  return piece
 }
 
 
@@ -294,6 +312,7 @@ const moveDown = (piece) => {
   if(timer > 30){
     let down =  {x: 0, y: 1}
     piece = movePiece(piece, down)
+
     timer = 0
   }
   timer++
@@ -308,7 +327,7 @@ const gameLoop = () => {
   drawPiece(ghostPiece,true)
   drawPiece(piece) 
   drawWell(gameWell)
-  piece = moveDown(piece)
+  //piece = moveDown(piece)
 }
 
 setInterval(gameLoop, 1000/60);
