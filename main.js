@@ -328,6 +328,7 @@ const moveDown = (piece) => {
 
     if(pieceCoords.x === prevCoords.x 
       && pieceCoords.y === prevCoords.y){
+    storeInWell(piece)
     piece = pickNewPiece(pieceBag)
     }
     timer = 0
@@ -335,6 +336,12 @@ const moveDown = (piece) => {
   timer++
   return piece
 }
+
+const storeInWell = (piece) => {
+    for(let block in piece){
+      gameWell[block] = piece[block]
+    }
+} 
 
 
 
