@@ -5,3 +5,7 @@ h1 {
     white-space: pre;
 
 }
+
+canvas{
+  background-color: black;
+}

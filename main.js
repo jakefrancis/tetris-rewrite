@@ -13,16 +13,27 @@ import {body,container,canvas,
   //startScreenDisplay();
 
   const canvas = document.createElement('canvas')
+  const holdCanvas = document.createElement('canvas')
+  const nextCanvas = document.createElement('canvas')
+
   const ctx = canvas.getContext('2d')
+  const holdCtx = holdCanvas.getContext('2d')
+  const nextCtx = nextCanvas.getContext('2d')
 
   const canvasWidth = pxSize * wellWidth
   const canvasHeight = pxSize * wellHeight
 
   canvas.width = canvasWidth
   canvas.height = canvasHeight
+
+  holdCanvas.width = nextCanvas.width = pxSize * 5
+  holdCanvas.height = nextCanvas.height = pxSize * 5 
   canvas.style.background = 'black'
 
   document.body.appendChild(canvas)
+
+  document.body.appendChild(holdCanvas)
+  document.body.appendChild(nextCanvas)
 
   import Vector from './vector.js'
 
@@ -91,7 +102,7 @@ const startingCoords = {x: 3, y: 1}
 let pieceCoords = {...startingCoords}
 
 
-const getIntialPieceCoords = (piece) => {
+const getIntialPieceCoords = (piece,alt = false,) => {
   let coords = []
   let x = 0
   let y = 0
@@ -99,9 +110,14 @@ const getIntialPieceCoords = (piece) => {
 
   for(let i = 0; i < totalSize; i++){
     if(piece.shape[i] !== '-'){
-      let vecX = x + pieceCoords.x
-      let vecY = y + pieceCoords.y
-      coords[`${vecX},${vecY}`] = new Block(vecX,vecY,piece.color)
+      if(!alt){
+        let vecX = x + pieceCoords.x
+        let vecY = y + pieceCoords.y
+        coords[`${vecX},${vecY}`] = new Block(vecX,vecY,piece.color)
+      }
+      else{
+        coords[`${x + 0.5},${y + 0.5}`] = new Block(x + 0.5,y + 0.5,piece.color)
+      }
     }
     else{
 
@@ -118,14 +134,20 @@ const getIntialPieceCoords = (piece) => {
 
 
 
+
+
 let activePiece = pickRandomPiece(pieceBag)
 let piece = getIntialPieceCoords(activePiece)
+let nextPiece = pickRandomPiece(pieceBag)
+let next = getIntialPieceCoords(nextPiece, true)
 let ghostPiece = {...piece}
 
 const pickNewPiece = (bag) => {
     pieceCoords = {...startingCoords}
-    activePiece = pickRandomPiece(bag)
+    activePiece = {...nextPiece}
+    nextPiece = pickRandomPiece(bag)
     pieceBag = fillBagIfEmpty(bag,pieces,2)
+    next = getIntialPieceCoords(nextPiece,true)
     piece = getIntialPieceCoords(activePiece)
     ghostPiece = {...piece}
     return piece
@@ -255,9 +277,9 @@ const verifyNoCollision = (piece) => {
   return true
 }
 
-const drawPiece = (piece, ghost = false) => {
+const drawPiece = (piece,context, ghost = false) => {
     for(let block in piece){
-      piece[block].draw(ctx,ghost)
+      piece[block].draw(context,ghost)
     }
 }
 
@@ -435,12 +457,15 @@ const resetGame = () => {
 
 
 const gameLoop = () => {
-  ctx.clearRect(0,0,canvasWidth, canvasHeight)  
+  ctx.clearRect(0,0,canvasWidth, canvasHeight)
+  nextCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
+    
   ghostPiece = dropGhostPiece(ghostPiece)
-  drawPiece(ghostPiece,true)
+  drawPiece(ghostPiece,ctx,true)
   
   drawWell(gameWell)
-  drawPiece(piece) 
+  drawPiece(piece,ctx) 
+  drawPiece(next,nextCtx)
   piece = moveDown(piece)
 }
 
