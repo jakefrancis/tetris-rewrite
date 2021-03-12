@@ -343,6 +343,9 @@ const moveDown = (piece) => {
     storeInWell(piece)
     gameWell = lineClear(gameWell,wellWidth,wellHeight)
     piece = pickNewPiece(pieceBag)
+    if(!verifyNoCollision(piece)){
+      resetGame()
+    }
     }
     timer = 0
   }
@@ -399,15 +402,6 @@ const lineClear = (well) => {
     return well
 }
 
-const buildWellArrayFromHash = (well,width,height) => {
-  let wellArray = []
-    for(let y = 0; y < height; y++){
-        for(let x = 0; x < width; x++){
-            wellArray.push(well[`${x},${y}`])
-        }
-    }
-  return wellArray
-}
 
 const rebuildWell = (well) => {
   let copy = [...well]
@@ -425,6 +419,18 @@ const rebuildWell = (well) => {
     return copy
 }
 
+const topClear = (well) => {
+  let top = well[0]
+  for(let x = 0; x < top.length; x++){
+    if(well[x] !== null) return false
+  }
+  return true
+}
+
+const resetGame = () => {
+  gameWell = produceWell(wellWidth,wellHeight)
+}
+
 
 
 
@@ -432,8 +438,9 @@ const gameLoop = () => {
   ctx.clearRect(0,0,canvasWidth, canvasHeight)  
   ghostPiece = dropGhostPiece(ghostPiece)
   drawPiece(ghostPiece,true)
-  drawPiece(piece) 
+  
   drawWell(gameWell)
+  drawPiece(piece) 
   piece = moveDown(piece)
 }
 
