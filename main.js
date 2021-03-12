@@ -82,8 +82,9 @@ console.log(pieceBag)
 console.log(pickRandomPiece(pieceBag))
 console.log(pieceBag)
 
+const startingCoords = {x: 3, y: 1}
 
-let pieceCoords = {x: 3, y: 1}
+let pieceCoords = {...startingCoords}
 
 
 const getIntialPieceCoords = (piece) => {
@@ -106,12 +107,24 @@ const getIntialPieceCoords = (piece) => {
   }
   return coords
 }
-let pickedPiece = pickRandomPiece(pieceBag)
+
+
+
 
 let activePiece = pickRandomPiece(pieceBag)
-let gamePiece = activePiece.shape
-let gameSize = activePiece.gridSize
 let piece = getIntialPieceCoords(activePiece)
+let ghostPiece = {...piece}
+
+const pickNewPiece = (bag) => {
+    pieceCoords = {...startingCoords}
+    activePiece = pickRandomPiece(bag)
+    pieceBag = fillBagIfEmpty(bag,pieces,2)
+    piece = getIntialPieceCoords(activePiece)
+    ghostPiece = {...piece}
+    return piece
+}
+
+
 console.log(piece)
 
 
@@ -284,7 +297,7 @@ const drawWell = (well) => {
     }
 }
 
-let ghostPiece = {...piece}
+
 let bottom = true
 
 
@@ -312,19 +325,22 @@ const moveDown = (piece) => {
     piece = movePiece(piece, down)
     //if the coords are the same that means the piece is no longer moving down,
     //or to put it simply it collided with something. 
-    if(pieceCoords.x === prevCoords.x && pieceCoords.y === prevCoords.y){
-      console.log('bottom')
+
+    if(pieceCoords.x === prevCoords.x 
+      && pieceCoords.y === prevCoords.y){
+    piece = pickNewPiece(pieceBag)
     }
     timer = 0
   }
   timer++
-  return piece  
+  return piece
 }
 
 
+
+
 const gameLoop = () => {
-  ctx.clearRect(0,0,canvasWidth, canvasHeight)
-  
+  ctx.clearRect(0,0,canvasWidth, canvasHeight)  
   ghostPiece = dropGhostPiece(ghostPiece)
   drawPiece(ghostPiece,true)
   drawPiece(piece) 
