@@ -95,7 +95,7 @@ const fillBagIfEmpty = (bag,pieces,duplicates = 6) => {
 
 
 let pieceBag = [] 
-pieceBag = fillBagIfEmpty(pieceBag,pieces,2)
+pieceBag = fillBagIfEmpty(pieceBag,pieces,4)
 console.log(pieceBag)
 console.log(pickRandomPiece(pieceBag))
 console.log(pieceBag)
@@ -155,6 +155,30 @@ const pickNewPiece = (bag) => {
     ghostPiece = {...piece}
     return piece
 }
+
+let holdPiece = null
+let hold = null
+
+const swapHoldPiece = (piece) => {
+  if(holdPiece !== null){
+    pieceCoords = {...startingCoords}
+    let holdCopy = {...holdPiece}
+    holdPiece = {...activePiece}
+    activePiece = holdCopy
+    hold = getIntialPieceCoords(holdPiece, true)
+    piece = getIntialPieceCoords(activePiece)
+    ghostPiece ={...piece}
+    return piece
+  }
+  else{
+    holdPiece = {...activePiece}
+    hold = getIntialPieceCoords(holdPiece,true)
+    piece = pickNewPiece(pieceBag)
+    return piece
+  }
+ 
+}
+
 
 
 console.log(piece)
@@ -281,6 +305,7 @@ const verifyNoCollision = (piece) => {
 }
 
 const drawPiece = (piece,context, ghost = false) => {
+  if(piece === null) return
     for(let block in piece){
       piece[block].draw(context,ghost)
     }
@@ -312,6 +337,9 @@ const keyHandler = (event) => {
         bottom = true
         ghostPiece = {...piece}
          break;
+    case 'c':
+        piece = swapHoldPiece(piece)
+        break;        
     default:
       let idle = {x: 0, y: 0}
       piece = movePiece(piece, idle)
@@ -462,6 +490,7 @@ const resetGame = () => {
 const gameLoop = () => {
   ctx.clearRect(0,0,canvasWidth, canvasHeight)
   nextCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
+  holdCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
     
   ghostPiece = dropGhostPiece(ghostPiece)
   drawPiece(ghostPiece,ctx,true)
@@ -469,6 +498,7 @@ const gameLoop = () => {
   drawWell(gameWell)
   drawPiece(piece,ctx) 
   drawPiece(next,nextCtx)
+  drawPiece(hold, holdCtx)
   piece = moveDown(piece)
 }
 
