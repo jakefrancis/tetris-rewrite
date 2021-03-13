@@ -9,3 +9,25 @@ h1 {
 canvas{
   background-color: black;
 }
+
+.canvas-wrapper{
+  max-width: 600px;
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+  grid-template-rows: auto;
+  grid-template-areas: 'hold well next';
+}
+
+.well {
+  margin: 0 auto;
+  grid-area: well;
+}
+
+.next {
+  margin: 0 auto;
+  grid-area: next;
+}
+.hold {
+  margin: 0 auto;
+  grid-area: hold;
+}

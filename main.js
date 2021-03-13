@@ -11,7 +11,7 @@ import {body,container,canvas,
   import {colors,backgroundColor,pieces,pxSize,wellHeight,wellWidth} from './src/constants.js'
 
   //startScreenDisplay();
-
+  const wrapper = document.getElementById('canvas-wrapper')
   const canvas = document.createElement('canvas')
   const holdCanvas = document.createElement('canvas')
   const nextCanvas = document.createElement('canvas')
@@ -30,10 +30,13 @@ import {body,container,canvas,
   holdCanvas.height = nextCanvas.height = pxSize * 5 
   canvas.style.background = 'black'
 
-  document.body.appendChild(canvas)
+  canvas.className='well'
+  holdCanvas.className='hold'
+  nextCanvas.className ='next'
 
-  document.body.appendChild(holdCanvas)
-  document.body.appendChild(nextCanvas)
+  wrapper.appendChild(canvas)
+  wrapper.appendChild(holdCanvas)
+  wrapper.appendChild(nextCanvas)
 
   import Vector from './vector.js'
 
