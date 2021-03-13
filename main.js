@@ -418,30 +418,20 @@ const lineClear = (well) => {
     let linesCleared = 0
     let blockCount = 0
     let nullCount = 0
-    //if the event of a line clear/s we will copy the well into an array
-    //splice the entire row/s or line/s from the array
-    //insert a new empty line/s at the beginning
-    //then rebuild the well hashmap from the array
     for(let y = wellHeight - 1; y >= 0; y--){
        for(let x = wellWidth -1; x >=0; x--){
-         if(well[y][x] === null){
-          nullCount++
-         }
-         else{
-          blockCount++
-         }
-         if(nullCount === wellWidth){
-           break
-         }
+         if(well[y][x] === null) nullCount++;
+         else blockCount++;
+         if(nullCount === wellWidth) break;
+         
          if(blockCount === wellWidth){
-           console.log('clear')
            well.splice(y,1)
            well.unshift([])
            for(let i = 0; i < wellWidth; i++){
              well[0].push(null)
            }
            linesCleared++     
-           y = y  +1
+           y++
          }
         
        }

@@ -122,9 +122,10 @@ const pieces = [
 const fps = 60;
 
 //sizes of the blocks and wells
-const pxSize = 20;
 const wellHeight = 30;
 const wellWidth = 10;
+
+const pxSize = Math.floor((window.innerHeight / wellHeight) * 0.7) ;
 
 
 export {colors,backgroundColor,pieces,pxSize,wellHeight,wellWidth}
