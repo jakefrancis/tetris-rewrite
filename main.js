@@ -418,7 +418,16 @@ function handleTouchMove(evt) {
       piece = swapHoldPiece(piece)
       yDown = yUp
       xDown = xUp  
-    } else if(yDiff < pxSize * -1){
+    } 
+    else if(yDiff < pxSize * -2){
+      console.log('hard')
+      //let down =  {x: 0, y: 1}
+      piece = dropGhostPiece(piece)
+      timer = 0    
+      yDown = yUp
+      xDown = xUp  
+    }    
+    else if(yDiff < pxSize * -1){
       let down =  {x: 0, y: 1}
       piece = movePiece(piece, down)
       timer = 0    
