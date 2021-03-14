@@ -9,7 +9,7 @@ const pastelColors = [
   "#c8a2c8",
 ];
 const paleColors = [
-  [150, 123, 182,1],
+  [255, 240, 245,1],
   [204,204,255,1],
   [150,123,182,1],
   [169,186,157,1],
@@ -122,7 +122,7 @@ const pieces = [
 const fps = 60;
 
 //sizes of the blocks and wells
-const wellHeight = 30;
+const wellHeight = 23;
 const wellWidth = 10;
 
 const pxSize = Math.floor((window.innerHeight / wellHeight) * 0.7) ;

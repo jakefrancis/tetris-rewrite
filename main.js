@@ -11,7 +11,6 @@ import {body,container,canvas,
   import {colors,backgroundColor,pieces,pxSize,wellHeight,wellWidth} from './src/constants.js'
   //startScreenDisplay();
 
-  console.log(pxSize)
   const wrapper = document.getElementById('canvas-wrapper')
   const canvas = document.createElement('canvas')
   const holdCanvas = document.createElement('canvas')
@@ -103,9 +102,7 @@ const fillBagIfEmpty = (bag,pieces,duplicates = 6) => {
 
 let pieceBag = [] 
 pieceBag = fillBagIfEmpty(pieceBag,pieces,4)
-console.log(pieceBag)
-console.log(pickRandomPiece(pieceBag))
-console.log(pieceBag)
+
 
 const startingCoords = {x: 3, y: 1}
 
@@ -194,7 +191,7 @@ const swapHoldPiece = (piece) => {
 
 
 
-console.log(piece)
+
 
 
 const rotateGamePiece = (gamePiece, size) => {
@@ -222,26 +219,23 @@ const rotate = (pieceToRotate, count = 0) => {
   newPiece.shape = newShape
   let rotations = 0
   let rotatedPiece = getIntialPieceCoords(newPiece)
-  console.log(rotatedPiece)
+
 
   let freeRotation = verifyNoCollision(rotatedPiece)
   
   if(pieceToRotate.name !== 'bar'){
-    console.log(pieceToRotate.name)
     rotatedPiece = wallKick(rotatedPiece, freeRotation)
     freeRotation = verifyNoCollision(rotatedPiece)
   }
   
 
   while(!freeRotation){
-    console.log(rotations)
     newShape = rotateGamePiece(newPiece.shape, newPiece.gridSize)
     newPiece.shape = newShape
     rotatedPiece = getIntialPieceCoords(newPiece)
     freeRotation = verifyNoCollision(rotatedPiece)
 
     if(pieceToRotate.name !== 'bar'){
-      console.log(pieceToRotate.name)
       rotatedPiece = wallKick(rotatedPiece, freeRotation)
       freeRotation = verifyNoCollision(rotatedPiece)
     }
@@ -432,7 +426,6 @@ function handleTouchMove(evt) {
       xDown = xUp  
     } 
     else if(yDiff < pxSize * -2){
-      console.log('hard')
       //let down =  {x: 0, y: 1}
       piece = dropGhostPiece(piece)
       timer = 0    
@@ -539,7 +532,6 @@ const lineClear = (well) => {
        nullCount = 0
     }
     if(linesCleared > 0){
-      console.log(rebuildWell(well))
       return rebuildWell(well)
     }
     return well
@@ -551,11 +543,8 @@ const rebuildWell = (well) => {
    for(let y = 0; y < wellHeight; y++){
       for(let x = 0; x < wellWidth; x++){
         if(copy[y][x] !== null){
-          console.log(copy[y][x])
-          console.log(y)
           copy[y][x].x = x
           copy[y][x].y = y
-          console.log(copy[y][x])
         }       
       }
     }
