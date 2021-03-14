@@ -369,7 +369,7 @@ document.addEventListener("touchstart", handleTouchStart, false);
 document.addEventListener("touchmove", handleTouchMove, false);
 document.addEventListener('touchend', handleTouchEnd, false)
 
-canvas.addEventListener('click',tapHandler)
+document.addEventListener('click',tapHandler)
 
 function tapHandler(event) {
   event.preventDefault()
