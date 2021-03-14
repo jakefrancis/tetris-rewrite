@@ -1,3 +1,7 @@
+body{
+  touch-action: manipulation;
+}
+
 h1 {
     font-family: 'Press Start 2P', cursive;
     font-size: 1rem;
@@ -11,7 +15,6 @@ canvas{
 }
 
 .canvas-wrapper{
-  max-width: 600px;
   display: grid;
   grid-template-columns: 25% 50% 25%;
   grid-template-rows: auto;
@@ -30,4 +33,11 @@ canvas{
 .hold {
   margin: 0 auto;
   grid-area: hold;
+}
+
+@media (max-width: 600px){
+  .canvas-wrapper{
+    max-width: 600px;
+  }  
+
 }

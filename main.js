@@ -9,8 +9,9 @@ import {body,container,canvas,
   escButton} from './src/dom.js'
 */
   import {colors,backgroundColor,pieces,pxSize,wellHeight,wellWidth} from './src/constants.js'
-
   //startScreenDisplay();
+
+  console.log(pxSize)
   const wrapper = document.getElementById('canvas-wrapper')
   const canvas = document.createElement('canvas')
   const holdCanvas = document.createElement('canvas')
@@ -352,6 +353,83 @@ let timer = 0
 
 
 window.onkeydown = keyHandler
+document.addEventListener("touchstart", handleTouchStart, false);
+document.addEventListener("touchmove", handleTouchMove, false);
+document.addEventListener('touchend', handleTouchEnd, false)
+
+canvas.addEventListener('click',tapHandler)
+
+function tapHandler(event) {
+  event.preventDefault()
+  piece = rotate(activePiece)
+  bottom = true
+  ghostPiece = {...piece}
+}
+
+let xDown = null;
+let yDown = null;
+
+function handleTouchEnd(evt){
+  xDown = null
+  yDown = null
+}
+
+function getTouches(evt) {
+  return evt.touches;
+}
+
+function handleTouchStart(evt) {
+  const firstTouch = getTouches(evt)[0];
+  xDown = firstTouch.clientX;
+  yDown = firstTouch.clientY;
+}
+
+function handleTouchMove(evt) {
+  if (!xDown || !yDown) {
+    return;
+  }
+
+  let xUp = evt.touches[0].clientX;
+  let yUp = evt.touches[0].clientY;
+
+  let xDiff = xDown - xUp;
+  let yDiff = yDown - yUp;
+
+
+  if (Math.abs(xDiff) > Math.abs(yDiff)) {
+    //most significant
+    if (xDiff > pxSize * 1.5) {
+      let left =  {x: -1, y: 0}
+      piece =  movePiece(piece, left)
+      bottom = true
+      ghostPiece = {...piece}
+      xDown = xUp   
+  
+    } else if(xDiff < pxSize * -1.5){
+      let right =  {x: 1, y: 0}
+      piece = movePiece(piece, right)
+      bottom = true
+      ghostPiece = {...piece}
+      xDown = xUp   
+    
+    }
+  } else {
+    if (yDiff > 5 * pxSize) {
+      piece = swapHoldPiece(piece)
+      yDown = yUp
+      xDown = xUp  
+    } else if(yDiff < pxSize * -1){
+      let down =  {x: 0, y: 1}
+      piece = movePiece(piece, down)
+      timer = 0    
+      yDown = yUp
+      xDown = xUp  
+    }
+  }
+  // reset values //
+  //xDown = xUp;
+  //yDown = yDiff;
+}
 
 const drawWell = (well) => {
     for(let y = 0; y < well.length; y++){
