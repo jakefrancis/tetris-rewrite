@@ -9,13 +9,13 @@ const pastelColors = [
   "#c8a2c8",
 ];
 const paleColors = [
-  "#fff0f5",
-  "#ccccff",
-  "#967bb6",
-  "#a9ba9d",
-  "#fffacd",
-  "#fdd5b1",
-  "#fbaed2",
+  [150, 123, 182,1],
+  [204,204,255,1],
+  [150,123,182,1],
+  [169,186,157,1],
+  [255, 250, 205, 1],
+  [253, 213, 177,1],
+  [251, 174, 210, 1],
 ];
 const backgroundColor = "#343434";
 const  basicColors = [

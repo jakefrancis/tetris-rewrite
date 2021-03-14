@@ -24,6 +24,8 @@ import {body,container,canvas,
   const canvasWidth = pxSize * wellWidth
   const canvasHeight = pxSize * wellHeight
 
+  let held = false
+
   canvas.width = canvasWidth
   canvas.height = canvasHeight
 
@@ -49,7 +51,11 @@ import {body,container,canvas,
         this.color = color
       }
       draw(can,ghost = false) {
-        can.fillStyle = !ghost ? this.color : 'rgb(255,255,255,0.3)' 
+        if(!ghost){
+          can.fillStyle = `rgb(${this.color[0] - 50},${this.color[1] - 50},${this.color[2] -50},${this.color[3]})`
+          
+        }
+        can.fillStyle = !ghost ? `rgb(${this.color[0]},${this.color[1]},${this.color[2]},${this.color[3]})` : 'rgb(255,255,255,0.3)' 
         can.fillRect(this.x * pxSize, this.y * pxSize, pxSize, pxSize)
       }
   }
@@ -161,22 +167,28 @@ let holdPiece = null
 let hold = null
 
 const swapHoldPiece = (piece) => {
-  if(holdPiece !== null){
-    pieceCoords = {...startingCoords}
-    let holdCopy = {...holdPiece}
-    holdPiece = {...activePiece}
-    activePiece = holdCopy
-    hold = getIntialPieceCoords(holdPiece, true)
-    piece = getIntialPieceCoords(activePiece)
-    ghostPiece ={...piece}
-    return piece
+  if(!held){
+    if(holdPiece !== null){
+      pieceCoords = {...startingCoords}
+      let holdCopy = {...holdPiece}
+      holdPiece = {...activePiece}
+      activePiece = holdCopy
+      hold = getIntialPieceCoords(holdPiece, true)
+      piece = getIntialPieceCoords(activePiece)
+      ghostPiece ={...piece}
+      held = true
+      return piece
+    }
+    else{
+      holdPiece = {...activePiece}
+      hold = getIntialPieceCoords(holdPiece,true)
+      piece = pickNewPiece(pieceBag)
+      held = true
+      return piece
+    }
   }
-  else{
-    holdPiece = {...activePiece}
-    hold = getIntialPieceCoords(holdPiece,true)
-    piece = pickNewPiece(pieceBag)
-    return piece
-  }
+  return piece
+  
  
 }
 
@@ -481,6 +493,7 @@ const moveDown = (piece) => {
     if(pieceCoords.x === prevCoords.x 
       && pieceCoords.y === prevCoords.y){
     storeInWell(piece)
+    held = false
     gameWell = lineClear(gameWell,wellWidth,wellHeight)
     piece = pickNewPiece(pieceBag)
     if(!verifyNoCollision(piece)){
