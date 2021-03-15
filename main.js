@@ -40,7 +40,7 @@ import {body,container,canvas,
   wrapper.appendChild(holdCanvas)
   wrapper.appendChild(nextCanvas)
 
-  import Vector from './vector.js'
+  //import Vector from './vector.js'
 
 //blocks displayed on screen
   class Block {
