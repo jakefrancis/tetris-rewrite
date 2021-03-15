@@ -8,7 +8,7 @@ import {body,container,canvas,
   downButton,enterButton,rotateButton,
   escButton} from './src/dom.js'
 */
-  import {colors,backgroundColor,pieces,pxSize,wellHeight,wellWidth} from './src/constants.js'
+  import {colors,backgroundColor,pieces,pxSize,altPx,wellHeight,wellWidth} from './src/constants.js'
   //startScreenDisplay();
 
   const wrapper = document.getElementById('canvas-wrapper')
@@ -28,8 +28,8 @@ import {body,container,canvas,
   canvas.width = canvasWidth
   canvas.height = canvasHeight
 
-  holdCanvas.width = nextCanvas.width = pxSize * 5
-  holdCanvas.height = nextCanvas.height = pxSize * 5 
+  holdCanvas.width = nextCanvas.width = altPx * 5
+  holdCanvas.height = nextCanvas.height = altPx * 5
   canvas.style.background = 'black'
 
   canvas.className='well'
@@ -44,18 +44,28 @@ import {body,container,canvas,
 
 //blocks displayed on screen
   class Block {
-      constructor(x,y,color){
+      constructor(x,y,color,size){
+        this.size = size
+        this.trueCenter = ((holdCanvas.width / 2) - (altPx * this.size / 2)) / altPx
         this.x = x
         this.y = y
         this.color = color
       }
-      draw(can,ghost = false) {
-        if(!ghost){
+      draw(can) {
           can.fillStyle = `rgb(${this.color[0] - 50},${this.color[1] - 50},${this.color[2] -50},${this.color[3]})`
           
-        }
-        can.fillStyle = !ghost ? `rgb(${this.color[0]},${this.color[1]},${this.color[2]},${this.color[3]})` : 'rgb(255,255,255,0.3)' 
+        
+        can.fillStyle = `rgb(${this.color[0]},${this.color[1]},${this.color[2]},${this.color[3]})`
         can.fillRect(this.x * pxSize, this.y * pxSize, pxSize, pxSize)
+      }
+      drawGhost(can){
+        can.fillStyle = 'rgb(255,255,255,0.3)' 
+        can.fillRect(this.x * pxSize, this.y * pxSize, pxSize, pxSize)
+      }
+      drawAlt(can){
+
+        can.fillStyle = 'rgb(255,255,255,1)' 
+        can.fillRect((this.x + this.trueCenter) * altPx, (this.y + this.trueCenter)* altPx, altPx, altPx)
       }
   }
 //~~~~~~~~~~~~~~~~
@@ -123,7 +133,7 @@ const getIntialPieceCoords = (piece,alt = false,) => {
         coords[`${vecX},${vecY}`] = new Block(vecX,vecY,piece.color)
       }
       else{
-        coords[`${x + 0.5},${y + 0.5}`] = new Block(x + 0.5,y + 0.5,piece.color)
+        coords[`${x},${y}`] = new Block(x,y,piece.color,piece.gridSize)
       }
     }
     else{
@@ -311,10 +321,19 @@ const verifyNoCollision = (piece) => {
   return true
 }
 
-const drawPiece = (piece,context, ghost = false) => {
+const drawPiece = (piece,context, ghost = false, alt = false) => {
   if(piece === null) return
     for(let block in piece){
-      piece[block].draw(context,ghost)
+      if(ghost){
+        piece[block].drawGhost(context)
+      }
+      else if(alt){
+        piece[block].drawAlt(context)
+      }
+      else{
+        piece[block].draw(context)
+      }      
+      
     }
 }
 
@@ -576,8 +595,8 @@ const gameLoop = () => {
   
   drawWell(gameWell)
   drawPiece(piece,ctx) 
-  drawPiece(next,nextCtx)
-  drawPiece(hold, holdCtx)
+  drawPiece(next,nextCtx,false,true)
+  drawPiece(hold, holdCtx,false,true)
   piece = moveDown(piece)
 }
 

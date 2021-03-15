@@ -125,7 +125,8 @@ const fps = 60;
 const wellHeight = 23;
 const wellWidth = 10;
 
-const pxSize = Math.floor((window.innerHeight / wellHeight) * 0.7) ;
+const pxSize = Math.floor((window.innerWidth / wellWidth) * 0.5) ;
+const altPx = Math.floor(pxSize / 2)
 
 
-export {colors,backgroundColor,pieces,pxSize,wellHeight,wellWidth}
+export {colors,backgroundColor,pieces,pxSize, altPx, wellHeight,wellWidth}
