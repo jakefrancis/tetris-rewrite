@@ -27,11 +27,13 @@ canvas{
 }
 
 .next {
-  margin: 0 auto;
+  display: flex;
+  align-content: flex-start;
+  margin-right: auto;
   grid-area: next;
 }
 .hold {
-  margin: 0 auto;
+  margin-left: auto;
   grid-area: hold;
 }
 

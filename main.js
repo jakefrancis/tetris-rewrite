@@ -393,10 +393,14 @@ function tapHandler(event) {
 
 let xDown = null;
 let yDown = null;
+let direction = null
+let dirEnd = false
 
 function handleTouchEnd(evt){
   xDown = null
   yDown = null
+  direction = null
+  dirEnd = false
 }
 
 function getTouches(evt) {
@@ -420,43 +424,55 @@ function handleTouchMove(evt) {
   let xDiff = xDown - xUp;
   let yDiff = yDown - yUp;
 
+  if(!dirEnd){
+    direction = Math.abs(xDiff) > Math.abs(yDiff) ? 'horizontal' : 'vertical'
+  }
+
+  //console.log(dirEnd)
+  console.log(direction)
+  
 
   if (Math.abs(xDiff) > Math.abs(yDiff)) {
     //most significant
-    if (xDiff > pxSize * 1.5) {
+    if (xDiff > pxSize * 1.5 && direction === 'horizontal') {
       let left =  {x: -1, y: 0}
       piece =  movePiece(piece, left)
       bottom = true
       ghostPiece = {...piece}
-      xDown = xUp   
+      xDown = xUp
+      dirEnd = true   
   
-    } else if(xDiff < pxSize * -1.5){
+    } else if(xDiff < pxSize * -1.5 && direction === 'horizontal'){
       let right =  {x: 1, y: 0}
       piece = movePiece(piece, right)
       bottom = true
       ghostPiece = {...piece}
       xDown = xUp   
+      dirEnd = true 
     
     }
   } else {
-    if (yDiff > 5 * pxSize) {
+    if (yDiff > 5 * pxSize && direction === 'vertical') {
       piece = swapHoldPiece(piece)
       yDown = yUp
-      xDown = xUp  
+      xDown = xUp
+      dirEnd = true  
     } 
-    else if(yDiff < pxSize * -2){
+    else if(yDiff < pxSize * -2 && direction === 'vertical'){
       //let down =  {x: 0, y: 1}
       piece = dropGhostPiece(piece)
       timer = 0    
       yDown = yUp
-      xDown = xUp  
+      xDown = xUp
+      dirEnd = true   
     }    
-    else if(yDiff < pxSize * -1){
+    else if(yDiff < pxSize * -1 && direction === 'vertical'){
       let down =  {x: 0, y: 1}
       piece = movePiece(piece, down)
       timer = 0    
       yDown = yUp
-      xDown = xUp  
+      xDown = xUp 
+      dirEnd = true  
     }
   }
   // reset values //
