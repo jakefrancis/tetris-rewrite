@@ -1,15 +1,15 @@
-const wellWidth = 200
-const wellHeight = 600
-const backgroundColor = 'black'
-let level = 1
-let numberOfLines = 0
+
+import {wellWidth,wellHeight,backgroundColor, pxSize} from './constants.js'
+
+const width = wellWidth * pxSize
+const height = wellHeight * pxSize
 
 let body = document.querySelectorAll("body");
 let container = document.createElement("div");
 container.style.position = "relative";
 container.setAttribute("id", "container");
-container.style.width = wellWidth * 2 + 5 + "px";
-container.style.height = wellHeight;
+container.style.width = width * 2 + 5 + "px";
+container.style.height = height;
 container.style.margin = "auto";
 document.body.appendChild(container);
 
@@ -18,8 +18,8 @@ let canvas = document.createElement("canvas");
 canvas.style.border = "solid 1px";
 canvas.style.position = "absolute";
 canvas.setAttribute("id", "wish");
-canvas.setAttribute("width", wellWidth);
-canvas.setAttribute("height", wellHeight);
+canvas.setAttribute("width", width);
+canvas.setAttribute("height", height);
 canvas.style.backgroundColor = backgroundColor;
 
 container.appendChild(canvas);
@@ -28,13 +28,13 @@ let info = document.createElement("div");
 
 info.setAttribute("id", "points");
 //info.setAttribute('class', 'font-effect-anaglyph')
-info.style.width = wellWidth + "px";
+info.style.width = width + "px";
 
 info.style.position = "absolute";
-info.style.height = wellHeight + "px";
+info.style.height = height + "px";
 info.style.border = "solid 1px";
 info.style.display = "inline-block";
-info.style.marginLeft = wellWidth + 5 + "px";
+info.style.marginLeft = width + 5 + "px";
 info.style.background = backgroundColor;
 info.style.textAlign = "center";
 container.appendChild(info);
@@ -46,11 +46,11 @@ let lineTotal = document.createElement("h1");
 
 pointTotal.setAttribute("id", "pointTotal");
 pointTotal.style.paddingTop = "50px";
-pointTotal.textContent = "Points: " + points;
+pointTotal.textContent = "Points: " + 0;
 levelTotal.style.paddingTop = "1em";
-levelTotal.textContent = "Level: " + level;
+levelTotal.textContent = "Level: " + 0;
 lineTotal.style.paddingTop = "1em";
-lineTotal.textContent = "Lines: " + numberOfLines;
+lineTotal.textContent = "Lines: " + 0;
 let nextBlock = document.createElement("canvas");
 info.appendChild(nextBlock);
 info.appendChild(pointTotal);
@@ -104,9 +104,9 @@ displayPaused.style.fontFamily = font;
 
 pauseScreen.appendChild(displayPaused);
 pauseScreen.setAttribute("id", "pauseScreen");
-pauseScreen.style.width = wellWidth + "px";
+pauseScreen.style.width = width + "px";
 pauseScreen.style.position = "absolute";
-pauseScreen.style.height = wellHeight + "px";
+pauseScreen.style.height = height + "px";
 pauseScreen.style.border = "solid 1px";
 pauseScreen.style.display = "inline-block";
 pauseScreen.style.textAlign = "center";

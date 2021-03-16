@@ -9,16 +9,16 @@ const pastelColors = [
   "#c8a2c8",
 ];
 const paleColors = [
-  "#fff0f5",
-  "#ccccff",
-  "#967bb6",
-  "#a9ba9d",
-  "#fffacd",
-  "#fdd5b1",
-  "#fbaed2",
+  [255, 240, 245,1],
+  [204,204,255,1],
+  [150,123,182,1],
+  [169,186,157,1],
+  [255, 250, 205, 1],
+  [253, 213, 177,1],
+  [251, 174, 210, 1],
 ];
 const backgroundColor = "#343434";
-let colors = [
+const  basicColors = [
   "#DE6B48",
   "#058ED9",
   "#FFBC42",
@@ -27,7 +27,8 @@ let colors = [
   "#EF7674",
   "#780116",
 ];
-colors = paleColors;
+const colors = paleColors;
+
 
 const pieces = [
   {
@@ -37,9 +38,9 @@ const pieces = [
     height: 3,
     width: 2,
     offset: 0,
-    shape: ["-", "O", "-", 
-            "-", "O", "-", 
-            "-", "O", "O"],
+    shape: ["-", "-", "-", 
+            "-", "-", "X", 
+            "X", "X", "X"],
   },
   {
     name: "leftL",
@@ -48,9 +49,9 @@ const pieces = [
     height: 3,
     width: 2,
     offset: 0,
-    shape: ["-", "X", "-",
-            "-", "X", "-",
-            "X", "X", "-"],
+    shape: ["-", "-", "-",
+            "X", "-", "-",
+            "X", "X", "X"],
   },
   {
     name: "square",
@@ -60,19 +61,10 @@ const pieces = [
     width: 2,
     offset: 0,
     shape: [
-      "-", "-", "-","-",
-      "-",
-      "X",
-      "X",
-      "-",
-      "-",
-      "X",
-      "X",
-      "-",
-      "-",
-      "-",
-      "-",
-      "-",
+      "-", "-","-","-",
+      "-","X","X","-",
+      "-","X","X","-",
+      "-","-","-","-",
     ],
   },
   {
@@ -82,7 +74,9 @@ const pieces = [
     height: 2,
     width: 3,
     offset: 0,
-    shape: ["X", "X", "X", "-", "X", "-", "-", "-", "-"],
+    shape: ["-", "-", "-", 
+            "-", "X", "-",
+            "X", "X", "X"],
   },
   {
     name: "rightStep",
@@ -91,7 +85,9 @@ const pieces = [
     height: 3,
     width: 2,
     offset: 0,
-    shape: ["-", "X", "-", "X", "X", "-", "X", "-", "-"],
+    shape: ["-", "-", "-", 
+            "X", "X", "-", 
+            "-", "X", "X"],
   },
   {
     name: "leftStep",
@@ -100,7 +96,9 @@ const pieces = [
     height: 3,
     width: 2,
     offset: 0,
-    shape: ["X", "-", "-", "X", "X", "-", "-", "X", "-"],
+    shape: ["-", "-", "-", 
+            "-", "X", "X", 
+            "X", "X", "-"],
   },
   {
     name: "bar",
@@ -110,39 +108,25 @@ const pieces = [
     width: 1,
     offset: 0,
     shape: [
-      "-",
-      "X",
-      "-",
-      "-",
-      "-",
-      "X",
-      "-",
-      "-",
-      "-",
-      "X",
-      "-",
-      "-",
-      "-",
-      "X",
-      "-",
-      "-",
+      "-","-","-","-",
+      "-","-","-","-",
+      "X","X","X","X",
+      "-","-","-","-",
     ],
   },
 ];
 
-let gameState = 0;
-const startScreen = 0;
-const gameRunning = 1;
-const gamePaused = 2;
 
-//button pressed for control
-let dir = "";
-let tempDir = "";
 
 //frame rate
 const fps = 60;
 
 //sizes of the blocks and wells
-const pxSize = 20;
-const wellWidth = pxSize * 10;
-const wellHeight = pxSize * 30;
+const wellHeight = 23;
+const wellWidth = 10;
+
+const pxSize = Math.floor((window.innerWidth / wellWidth) * 0.5) ;
+const altPx = Math.floor(pxSize / 2)
+
+
+export {colors,backgroundColor,pieces,pxSize, altPx, wellHeight,wellWidth}

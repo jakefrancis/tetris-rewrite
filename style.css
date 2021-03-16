@@ -1,7 +1,45 @@
+body{
+  touch-action: manipulation;
+}
+
 h1 {
     font-family: 'Press Start 2P', cursive;
     font-size: 1rem;
     color: white;
     white-space: pre;
+
+}
+
+canvas{
+  background-color: black;
+}
+
+.canvas-wrapper{
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+  grid-template-rows: auto;
+  grid-template-areas: 'hold well next';
+}
+
+.well {
+  margin: 0 auto;
+  grid-area: well;
+}
+
+.next {
+  display: flex;
+  align-content: flex-start;
+  margin-right: auto;
+  grid-area: next;
+}
+.hold {
+  margin-left: auto;
+  grid-area: hold;
+}
+
+@media (max-width: 600px){
+  .canvas-wrapper{
+    max-width: 600px;
+  }  
 
 }
