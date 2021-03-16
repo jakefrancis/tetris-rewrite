@@ -65,7 +65,7 @@ import {body,container,canvas,
       drawAlt(can){
 
         can.fillStyle = 'rgb(255,255,255,1)' 
-        can.fillRect((this.x + this.trueCenter) * altPx, (this.y + this.trueCenter)* altPx, altPx, altPx)
+        can.fillRect(Math.floor((this.x + this.trueCenter) * altPx), Math.floor((this.y + this.trueCenter)* altPx), altPx, altPx)
       }
   }
 //~~~~~~~~~~~~~~~~
