@@ -385,10 +385,12 @@ document.addEventListener('touchend', handleTouchEnd, false)
 document.addEventListener('click',tapHandler)
 
 function tapHandler(event) {
-  event.preventDefault()
-  piece = rotate(activePiece)
-  bottom = true
-  ghostPiece = {...piece}
+  if(!dropped){
+    event.preventDefault()
+    piece = rotate(activePiece)
+    bottom = true
+    ghostPiece = {...piece}
+  } 
 }
 
 let xDown = null;
@@ -427,10 +429,6 @@ function handleTouchMove(evt) {
   if(!dirEnd){
     direction = Math.abs(xDiff) > Math.abs(yDiff) ? 'horizontal' : 'vertical'
   }
-
-  //console.log(dirEnd)
-  console.log(direction)
-  
 
   if (Math.abs(xDiff) > Math.abs(yDiff)) {
     //most significant
@@ -492,10 +490,9 @@ const drawWell = (well) => {
 
 
 let bottom = true
+let dropped = false
 
-
-
-const hardDrop = (ghostPiece) => {
+const hardDrop = (ghostPiece, ghost = false) => {
   //copy the piece object provide to avoid mutation
   let copy = {...ghostPiece}
   let prev;
@@ -507,6 +504,9 @@ const hardDrop = (ghostPiece) => {
     copy = createPieceFromMove(copy,down)
   }
   //return the previous position prior to finding a collison. 
+  if(!ghost){
+    dropped = true
+  }
     return prev
   
 }
@@ -524,6 +524,9 @@ const moveDown = (piece) => {
     held = false
     gameWell = lineClear(gameWell,wellWidth,wellHeight)
     piece = pickNewPiece(pieceBag)
+    if(dropped){
+      dropped = false
+    }
     if(!verifyNoCollision(piece)){
       resetGame()
     }
@@ -606,7 +609,7 @@ const gameLoop = () => {
   nextCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
   holdCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
     
-  ghostPiece = hardDrop(ghostPiece)
+  ghostPiece = hardDrop(ghostPiece,true)
   drawPiece(ghostPiece,ctx,true)
   
   drawWell(gameWell)
