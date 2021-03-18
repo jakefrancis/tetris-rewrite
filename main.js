@@ -460,7 +460,7 @@ function handleTouchMove(evt) {
     } 
     else if(yDiff < pxSize * -2 && direction === 'vertical'){
       //let down =  {x: 0, y: 1}
-      piece = dropGhostPiece(piece)
+      piece = hardDrop(piece)
       timer = 0    
       yDown = yUp
       xDown = xUp
@@ -495,7 +495,7 @@ let bottom = true
 
 
 
-const dropGhostPiece = (ghostPiece) => {
+const hardDrop = (ghostPiece) => {
   //copy the piece object provide to avoid mutation
   let copy = {...ghostPiece}
   let prev;
@@ -606,7 +606,7 @@ const gameLoop = () => {
   nextCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
   holdCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
     
-  ghostPiece = dropGhostPiece(ghostPiece)
+  ghostPiece = hardDrop(ghostPiece)
   drawPiece(ghostPiece,ctx,true)
   
   drawWell(gameWell)
