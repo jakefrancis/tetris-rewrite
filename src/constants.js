@@ -125,7 +125,11 @@ const fps = 60;
 const wellHeight = 23;
 const wellWidth = 10;
 
-const pxSize = Math.floor((window.innerWidth / wellWidth) * 0.5) ;
+const wrapper = document.getElementById('canvas-wrapper')
+let mobileSize = Math.floor((wrapper.offsetWidth / wellWidth) * 0.48)
+mobileSize = mobileSize % 2 ? mobileSize : mobileSize + 1 
+const deskTopSize = Math.floor(300 / wellWidth) 
+const pxSize = Math.min(mobileSize,deskTopSize)
 const altPx = Math.floor(pxSize / 2)
 
 

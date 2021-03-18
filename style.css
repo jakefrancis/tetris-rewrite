@@ -15,31 +15,35 @@ canvas{
 }
 
 .canvas-wrapper{
+  
+  margin: 0 auto;
+  padding-top: 5rem;
+  max-width: 600px;
   display: grid;
   grid-template-columns: 25% 50% 25%;
   grid-template-rows: auto;
   grid-template-areas: 'hold well next';
 }
-
-.well {
+.well{
+  width: auto;
   margin: 0 auto;
+}
+
+.well-wrapper{
+  box-sizing: border-box;
+  text-align: center;
   grid-area: well;
 }
 
 .next {
+  width: auto;
   display: flex;
   align-content: flex-start;
   margin-right: auto;
   grid-area: next;
 }
 .hold {
+  width: auto;
   margin-left: auto;
   grid-area: hold;
-}
-
-@media (max-width: 600px){
-  .canvas-wrapper{
-    max-width: 600px;
-  }  
-
 }

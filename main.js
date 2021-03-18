@@ -12,6 +12,9 @@ import {body,container,canvas,
   //startScreenDisplay();
 
   const wrapper = document.getElementById('canvas-wrapper')
+  const wellWrapper = document.createElement('div')
+  wellWrapper.className = 'well-wrapper'
+  wrapper.appendChild(wellWrapper)
   const canvas = document.createElement('canvas')
   const holdCanvas = document.createElement('canvas')
   const nextCanvas = document.createElement('canvas')
@@ -36,7 +39,7 @@ import {body,container,canvas,
   holdCanvas.className='hold'
   nextCanvas.className ='next'
 
-  wrapper.appendChild(canvas)
+  wellWrapper.appendChild(canvas)
   wrapper.appendChild(holdCanvas)
   wrapper.appendChild(nextCanvas)
 
