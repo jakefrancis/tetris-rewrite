@@ -30,7 +30,7 @@ import {body,container,canvas,
   const begginingDifficulty = 48
   let currentDifficulty = begginingDifficulty
   let level = 0
-  let lines = 90
+  let lines = 0
   let points = 0
   let lockDelay = 0
 
