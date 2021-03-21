@@ -381,6 +381,7 @@ const keyHandler = (event) => {
 
 
 let timer = 0
+let hardDropCommit = false
 
 
 
@@ -437,7 +438,7 @@ function handleTouchMove(evt) {
       direction = Math.abs(xDiff) > Math.abs(yDiff) ? 'horizontal' : 'vertical'
     }
   
-    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+    if (Math.abs(xDiff) > Math.abs(yDiff) && hardDropCommit === false) {
       //most significant
       if (xDiff > pxSize * 1.5 ) {
         let left =  {x: -1, y: 0}
@@ -446,7 +447,7 @@ function handleTouchMove(evt) {
         xDown = xUp
         dirEnd = true   
     
-      } else if(xDiff < pxSize * -1.5){
+      } else if(xDiff < pxSize * -1.5 && hardDropCommit === false){
         let right =  {x: 1, y: 0}
         piece = movePiece(piece, right)
         ghostPiece = {...piece}
@@ -455,7 +456,7 @@ function handleTouchMove(evt) {
       
       }
     } else {
-      if (yDiff > 5 * pxSize && direction === 'vertical') {
+      if (yDiff > 5 * pxSize && direction === 'vertical' && hardDropCommit === false) {
         piece = swapHoldPiece(piece)
         yDown = yUp
         xDown = xUp
@@ -464,6 +465,9 @@ function handleTouchMove(evt) {
       else if(yDiff < pxSize * -2 && direction === 'vertical'){
         //let down =  {x: 0, y: 1}
         piece = hardDrop(piece)  
+        hardDropCommit = true
+        timer = currentDifficulty
+        lockDelay = 15
         yDown = 0
         xDown = 0
       }    
@@ -551,6 +555,7 @@ const moveDown = (piece) => {
       }
       lockDelay = 0
       bottom = false
+      hardDropCommit = false
     } 
   }
   timer++
@@ -627,7 +632,7 @@ const resetGame = () => {
 }
 
 const levelChange = (lines) => {
-  let level = Math.floor(lines / 1)
+  let level = Math.floor(lines / 10)
   currentDifficulty = begginingDifficulty - level * 5
   currentDifficulty = currentDifficulty < 4 ? 4 : currentDifficulty
   return level
