@@ -27,6 +27,12 @@ import {body,container,canvas,
   const canvasHeight = pxSize * wellHeight
 
   let held = false
+  const begginingDifficulty = 48
+  let currentDifficulty = begginingDifficulty
+  let level = 0
+  let lines = 0
+  let points = 0
+
 
   canvas.width = canvasWidth
   canvas.height = canvasHeight
@@ -515,7 +521,7 @@ const hardDrop = (ghostPiece, ghost = false) => {
 }
 
 const moveDown = (piece) => {  
-  if(timer > 30){
+  if(timer > currentDifficulty){
     let down =  {x: 0, y: 1}
     let prevCoords = {...pieceCoords}
     piece = movePiece(piece, down)
@@ -573,6 +579,11 @@ const lineClear = (well) => {
        nullCount = 0
     }
     if(linesCleared > 0){
+      lines += linesCleared
+      points += calculatePoints(linesCleared)
+      level = levelChange(lines)
+      console.log('Points:',points)
+      console.log('Level:',level)
       return rebuildWell(well)
     }
     return well
@@ -602,6 +613,36 @@ const topClear = (well) => {
 
 const resetGame = () => {
   gameWell = produceWell(wellWidth,wellHeight)
+}
+
+const levelChange = (lines) => {
+  let level = Math.floor(lines / 10)
+  currentDifficulty = begginingDifficulty - level * 5
+  currentDifficulty = currentDifficulty < 4 ? 4 : currentDifficulty
+  return level
+}
+
+const calculatePoints = (linesCleared) => {
+  let multiplier;
+  switch(linesCleared){
+    case 1:
+      multiplier = 40
+      break;
+    case 2:
+      multiplier = 100
+      break;
+    case 3:
+      multiplier = 300
+      break;
+    case 4: 
+      multiplier = 1200
+      break;
+    default:
+      multiplier = 0
+      break;      
+  }
+  let points = (level + 1) * multiplier
+  return points
 }
 
 
