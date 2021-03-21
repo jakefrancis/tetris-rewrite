@@ -30,7 +30,7 @@ import {body,container,canvas,
   const begginingDifficulty = 48
   let currentDifficulty = begginingDifficulty
   let level = 0
-  let lines = 0
+  let lines = 90
   let points = 0
   let lockDelay = 0
 
@@ -422,62 +422,63 @@ function handleTouchStart(evt) {
 }
 
 function handleTouchMove(evt) {
-  if (!xDown || !yDown) {
-    return;
-  }
-
-  let xUp = evt.touches[0].clientX;
-  let yUp = evt.touches[0].clientY;
-
-  let xDiff = xDown - xUp;
-  let yDiff = yDown - yUp;
-
-  if(!dirEnd){
-    direction = Math.abs(xDiff) > Math.abs(yDiff) ? 'horizontal' : 'vertical'
-  }
-
-  if (Math.abs(xDiff) > Math.abs(yDiff)) {
-    //most significant
-    if (xDiff > pxSize * 1.5 && direction === 'horizontal') {
-      let left =  {x: -1, y: 0}
-      piece =  movePiece(piece, left)
-      ghostPiece = {...piece}
-      xDown = xUp
-      dirEnd = true   
+  setTimeout(() => {
+    if (!xDown || !yDown) {
+      return;
+    }
   
-    } else if(xDiff < pxSize * -1.5 && direction === 'horizontal'){
-      let right =  {x: 1, y: 0}
-      piece = movePiece(piece, right)
-      ghostPiece = {...piece}
-      xDown = xUp   
-      dirEnd = true 
-    
+    let xUp = evt.touches[0].clientX;
+    let yUp = evt.touches[0].clientY;
+  
+    let xDiff = xDown - xUp;
+    let yDiff = yDown - yUp;
+  
+    if(!dirEnd){
+      direction = Math.abs(xDiff) > Math.abs(yDiff) ? 'horizontal' : 'vertical'
     }
-  } else {
-    if (yDiff > 5 * pxSize && direction === 'vertical') {
-      piece = swapHoldPiece(piece)
-      yDown = yUp
-      xDown = xUp
-      dirEnd = true  
-    } 
-    else if(yDiff < pxSize * -2 && direction === 'vertical'){
-      //let down =  {x: 0, y: 1}
-      piece = hardDrop(piece)
-      lockDelay = 29
-      timer = 0    
-      yDown = yUp
-      xDown = xUp
-      dirEnd = true   
-    }    
-    else if(yDiff < pxSize * -1 && direction === 'vertical'){
-      let down =  {x: 0, y: 1}
-      piece = movePiece(piece, down)
-      timer = 0    
-      yDown = yUp
-      xDown = xUp 
-      dirEnd = true  
+  
+    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+      //most significant
+      if (xDiff > pxSize * 1.5 ) {
+        let left =  {x: -1, y: 0}
+        piece =  movePiece(piece, left)
+        ghostPiece = {...piece}
+        xDown = xUp
+        dirEnd = true   
+    
+      } else if(xDiff < pxSize * -1.5){
+        let right =  {x: 1, y: 0}
+        piece = movePiece(piece, right)
+        ghostPiece = {...piece}
+        xDown = xUp   
+        dirEnd = true 
+      
+      }
+    } else {
+      if (yDiff > 5 * pxSize && direction === 'vertical') {
+        piece = swapHoldPiece(piece)
+        yDown = yUp
+        xDown = xUp
+        dirEnd = true  
+      } 
+      else if(yDiff < pxSize * -2 && direction === 'vertical'){
+        //let down =  {x: 0, y: 1}
+        piece = hardDrop(piece)  
+        yDown = 0
+        xDown = 0
+      }    
+      else if(yDiff < pxSize * -1 && direction === 'vertical'){
+        let down =  {x: 0, y: 1}
+        piece = movePiece(piece, down)
+        timer = 0    
+        yDown = yUp
+        xDown = xUp 
+        dirEnd = true  
+      }
     }
   }
+,0)
+  
   // reset values //
   //xDown = xUp;
   //yDown = yDiff;
@@ -626,7 +627,7 @@ const resetGame = () => {
 }
 
 const levelChange = (lines) => {
-  let level = Math.floor(lines / 10)
+  let level = Math.floor(lines / 1)
   currentDifficulty = begginingDifficulty - level * 5
   currentDifficulty = currentDifficulty < 4 ? 4 : currentDifficulty
   return level
