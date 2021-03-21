@@ -1,5 +1,6 @@
 body{
   touch-action: manipulation;
+  font-family: 'Roboto', sans-serif;
 }
 
 h1 {
@@ -9,6 +10,11 @@ h1 {
     white-space: pre;
 
 }
+.points{
+  padding-top: 3rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
 
 canvas{
   background-color: black;
@@ -17,7 +23,6 @@ canvas{
 .canvas-wrapper{
   
   margin: 0 auto;
-  padding-top: 5rem;
   max-width: 600px;
   display: grid;
   grid-template-columns: 25% 50% 25%;

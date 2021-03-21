@@ -19,6 +19,8 @@ import {body,container,canvas,
   const holdCanvas = document.createElement('canvas')
   const nextCanvas = document.createElement('canvas')
 
+  const pointsHeading = document.getElementById('points')
+
   const ctx = canvas.getContext('2d')
   const holdCtx = holdCanvas.getContext('2d')
   const nextCtx = nextCanvas.getContext('2d')
@@ -598,7 +600,7 @@ const lineClear = (well) => {
       lines += linesCleared
       points += calculatePoints(linesCleared)
       level = levelChange(lines)
-      console.log('Points:',points)
+      pointsHeading.innerText = String(points)
       console.log('Level:',level)
       return rebuildWell(well)
     }
