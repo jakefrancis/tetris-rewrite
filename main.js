@@ -32,6 +32,7 @@ import {body,container,canvas,
   let level = 0
   let lines = 0
   let points = 0
+  let lockDelay = 0
 
 
   canvas.width = canvasWidth
@@ -358,18 +359,15 @@ const keyHandler = (event) => {
     case 'ArrowRight':
       let right =  {x: 1, y: 0}
       piece = movePiece(piece, right)
-      bottom = true
       ghostPiece = {...piece}
       break;
     case 'ArrowLeft':
         let left =  {x: -1, y: 0}
         piece =  movePiece(piece, left)
-        bottom = true
         ghostPiece = {...piece}
       break;
     case ' ':
         piece = rotate(activePiece)
-        bottom = true
         ghostPiece = {...piece}
          break;
     case 'c':
@@ -397,7 +395,6 @@ function tapHandler(event) {
   if(!dropped){
     event.preventDefault()
     piece = rotate(activePiece)
-    bottom = true
     ghostPiece = {...piece}
   } 
 }
@@ -444,7 +441,6 @@ function handleTouchMove(evt) {
     if (xDiff > pxSize * 1.5 && direction === 'horizontal') {
       let left =  {x: -1, y: 0}
       piece =  movePiece(piece, left)
-      bottom = true
       ghostPiece = {...piece}
       xDown = xUp
       dirEnd = true   
@@ -452,7 +448,6 @@ function handleTouchMove(evt) {
     } else if(xDiff < pxSize * -1.5 && direction === 'horizontal'){
       let right =  {x: 1, y: 0}
       piece = movePiece(piece, right)
-      bottom = true
       ghostPiece = {...piece}
       xDown = xUp   
       dirEnd = true 
@@ -468,6 +463,7 @@ function handleTouchMove(evt) {
     else if(yDiff < pxSize * -2 && direction === 'vertical'){
       //let down =  {x: 0, y: 1}
       piece = hardDrop(piece)
+      lockDelay = 29
       timer = 0    
       yDown = yUp
       xDown = xUp
@@ -498,7 +494,7 @@ const drawWell = (well) => {
 }
 
 
-let bottom = true
+let bottom = false
 let dropped = false
 
 const hardDrop = (ghostPiece, ghost = false) => {
@@ -521,7 +517,7 @@ const hardDrop = (ghostPiece, ghost = false) => {
 }
 
 const moveDown = (piece) => {  
-  if(timer > currentDifficulty){
+  if(timer > currentDifficulty || bottom === true){
     let down =  {x: 0, y: 1}
     let prevCoords = {...pieceCoords}
     piece = movePiece(piece, down)
@@ -529,18 +525,32 @@ const moveDown = (piece) => {
     //or too  put it simply it collided with something. 
     if(pieceCoords.x === prevCoords.x 
       && pieceCoords.y === prevCoords.y){
-    storeInWell(piece)
-    held = false
-    gameWell = lineClear(gameWell,wellWidth,wellHeight)
-    piece = pickNewPiece(pieceBag)
-    if(dropped){
-      dropped = false
+      bottom = true       
     }
-    if(!verifyNoCollision(piece)){
-      resetGame()
+    else{
+      lockDelay = 0
+      bottom = false
     }
-    }
-    timer = 0
+      timer = 0
+    
+  }
+  if(bottom){
+    lockDelay++
+    console.log(lockDelay)
+    if(lockDelay === 30){
+      storeInWell(piece)
+      held = false
+      gameWell = lineClear(gameWell,wellWidth,wellHeight)
+      piece = pickNewPiece(pieceBag)
+      if(dropped){
+        dropped = false
+      }
+      if(!verifyNoCollision(piece)){
+        resetGame()
+      }
+      lockDelay = 0
+      bottom = false
+    } 
   }
   timer++
   return piece
