@@ -123,8 +123,7 @@ const fillBagIfEmpty = (bag,pieces,duplicates = 6) => {
 }
 
 
-let pieceBag = [] 
-pieceBag = fillBagIfEmpty(pieceBag,pieces,4)
+
 
 
 const startingCoords = {x: 3, y: 1}
@@ -165,12 +164,18 @@ const getIntialPieceCoords = (piece,alt = false,) => {
 
 
 
-
+let pieceBag = [] 
+pieceBag = fillBagIfEmpty(pieceBag,pieces,4)
 let activePiece = pickRandomPiece(pieceBag)
 let piece = getIntialPieceCoords(activePiece)
 let nextPiece = pickRandomPiece(pieceBag)
 let next = getIntialPieceCoords(nextPiece, true)
 let ghostPiece = {...piece}
+let holdPiece = null
+let hold = null
+
+
+
 
 const pickNewPiece = (bag) => {
     pieceCoords = {...startingCoords}
@@ -183,8 +188,7 @@ const pickNewPiece = (bag) => {
     return piece
 }
 
-let holdPiece = null
-let hold = null
+
 
 const swapHoldPiece = (piece) => {
   if(!held){
@@ -544,7 +548,6 @@ const moveDown = (piece) => {
   }
   if(bottom){
     lockDelay++
-    console.log(lockDelay)
     if(lockDelay === 30){
       storeInWell(piece)
       held = false
@@ -554,7 +557,7 @@ const moveDown = (piece) => {
         dropped = false
       }
       if(!verifyNoCollision(piece)){
-        resetGame()
+       piece = resetGame()
       }
       lockDelay = 0
       bottom = false
@@ -631,7 +634,23 @@ const topClear = (well) => {
 }
 
 const resetGame = () => {
+  console.log(activePiece)
   gameWell = produceWell(wellWidth,wellHeight)
+  pieceBag = []
+  pieceBag = fillBagIfEmpty(pieceBag,pieces,4)
+  activePiece = pickRandomPiece(pieceBag)
+  piece = getIntialPieceCoords(activePiece)
+  nextPiece = pickRandomPiece(pieceBag)
+  next = getIntialPieceCoords(nextPiece, true)
+  held = false
+  holdPiece = null
+  hold = null
+  ghostPiece = {...piece}
+  points = 0
+  level = 0
+  timer = 0
+  currentDifficulty = begginingDifficulty
+  return piece
 }
 
 const levelChange = (lines) => {
