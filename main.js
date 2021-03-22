@@ -356,7 +356,7 @@ const drawPiece = (piece,context, ghost = false, alt = false) => {
 
 const keyHandler = (event) => {
   let key = event.key
-  
+  console.log(key)
   switch(key){
     case 'ArrowDown':
       let down =  {x: 0, y: 1}
@@ -379,7 +379,9 @@ const keyHandler = (event) => {
          break;
     case 'c':
         piece = swapHoldPiece(piece)
-        break;        
+        break;
+    case 'Escape':
+         currentState = 'playing' === currentState ? 'paused' : 'playing'        
     default:
       let idle = {x: 0, y: 0}
       piece = movePiece(piece, idle)
@@ -688,9 +690,7 @@ const calculatePoints = (linesCleared) => {
 }
 
 
-
-
-const gameLoop = () => {
+const playing = () => {
   ctx.clearRect(0,0,canvasWidth, canvasHeight)
   nextCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
   holdCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
@@ -703,6 +703,26 @@ const gameLoop = () => {
   drawPiece(next,nextCtx,false,true)
   drawPiece(hold, holdCtx,false,true)
   piece = moveDown(piece)
+}
+
+const paused = () => {
+  ctx.clearRect(0,0,canvasWidth, canvasHeight)
+  nextCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
+  holdCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
+}
+let currentState = 'playing'
+
+const gameLoop = () => {
+  switch(currentState){
+    case 'playing':
+      playing()
+      break;
+    case 'paused':
+      paused()
+      break;
+    case 'main':
+      break;
+  }
 }
 
 setInterval(gameLoop, 1000/60);
