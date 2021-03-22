@@ -1,1 +1,0 @@
-fix line clear for new 2d array data structure
