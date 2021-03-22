@@ -649,7 +649,8 @@ const resetGame = () => {
   hold = null
   ghostPiece = {...piece}
   points = 0
-  level = 0
+  level = 1
+  lines = 0
   timer = 0
   currentDifficulty = begginingDifficulty
   return piece
@@ -657,10 +658,7 @@ const resetGame = () => {
 
 const levelChange = (lines) => {
   let newLevel = Math.floor(lines / 10) + 1
-  if(level < newLevel){
-      levelHeading.innerText = `Level ${newLevel}`
-  }
-
+  levelHeading.innerText = `Level ${newLevel}`
   currentDifficulty = begginingDifficulty - level * 5
   currentDifficulty = currentDifficulty < 4 ? 4 : currentDifficulty
   return newLevel
