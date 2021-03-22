@@ -20,6 +20,7 @@ import {body,container,canvas,
   const nextCanvas = document.createElement('canvas')
 
   const pointsHeading = document.getElementById('points')
+  const levelHeading = document.getElementById('level')
 
   const ctx = canvas.getContext('2d')
   const holdCtx = holdCanvas.getContext('2d')
@@ -31,7 +32,7 @@ import {body,container,canvas,
   let held = false
   const begginingDifficulty = 48
   let currentDifficulty = begginingDifficulty
-  let level = 0
+  let level = 1
   let lines = 0
   let points = 0
   let lockDelay = 0
@@ -634,10 +635,14 @@ const resetGame = () => {
 }
 
 const levelChange = (lines) => {
-  let level = Math.floor(lines / 10)
+  let newLevel = Math.floor(lines / 10) + 1
+  if(level < newLevel){
+      levelHeading.innerText = `Level ${newLevel}`
+  }
+
   currentDifficulty = begginingDifficulty - level * 5
   currentDifficulty = currentDifficulty < 4 ? 4 : currentDifficulty
-  return level
+  return newLevel
 }
 
 const calculatePoints = (linesCleared) => {
@@ -659,7 +664,7 @@ const calculatePoints = (linesCleared) => {
       multiplier = 0
       break;      
   }
-  let points = (level + 1) * multiplier
+  let points = (level) * multiplier
   return points
 }
 

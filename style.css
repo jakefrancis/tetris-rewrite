@@ -10,18 +10,27 @@ h1 {
     white-space: pre;
 
 }
+
+.info-container{
+  padding-top: 2rem;
+  margin: 0 auto;
+  max-width: 600px;
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+}
 .points{
-  padding-top: 3rem;
   text-align: center;
   margin-bottom: 0.5rem;
+}
+.points-heading{
+  text-align: right;
 }
 
 canvas{
   background-color: black;
 }
 
-.canvas-wrapper{
-  
+.canvas-wrapper{  
   margin: 0 auto;
   max-width: 600px;
   display: grid;
