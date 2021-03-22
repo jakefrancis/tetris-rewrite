@@ -12,9 +12,15 @@ import {body,container,canvas,
   //startScreenDisplay();
 
   const wrapper = document.getElementById('canvas-wrapper')
+  const wellWrapper = document.createElement('div')
+  wellWrapper.className = 'well-wrapper'
+  wrapper.appendChild(wellWrapper)
   const canvas = document.createElement('canvas')
   const holdCanvas = document.createElement('canvas')
   const nextCanvas = document.createElement('canvas')
+
+  const pointsHeading = document.getElementById('points')
+  const levelHeading = document.getElementById('level')
 
   const ctx = canvas.getContext('2d')
   const holdCtx = holdCanvas.getContext('2d')
@@ -24,6 +30,13 @@ import {body,container,canvas,
   const canvasHeight = pxSize * wellHeight
 
   let held = false
+  const begginingDifficulty = 48
+  let currentDifficulty = begginingDifficulty
+  let level = 1
+  let lines = 0
+  let points = 0
+  let lockDelay = 0
+
 
   canvas.width = canvasWidth
   canvas.height = canvasHeight
@@ -36,7 +49,7 @@ import {body,container,canvas,
   holdCanvas.className='hold'
   nextCanvas.className ='next'
 
-  wrapper.appendChild(canvas)
+  wellWrapper.appendChild(canvas)
   wrapper.appendChild(holdCanvas)
   wrapper.appendChild(nextCanvas)
 
@@ -110,8 +123,7 @@ const fillBagIfEmpty = (bag,pieces,duplicates = 6) => {
 }
 
 
-let pieceBag = [] 
-pieceBag = fillBagIfEmpty(pieceBag,pieces,4)
+
 
 
 const startingCoords = {x: 3, y: 1}
@@ -152,12 +164,18 @@ const getIntialPieceCoords = (piece,alt = false,) => {
 
 
 
-
+let pieceBag = [] 
+pieceBag = fillBagIfEmpty(pieceBag,pieces,4)
 let activePiece = pickRandomPiece(pieceBag)
 let piece = getIntialPieceCoords(activePiece)
 let nextPiece = pickRandomPiece(pieceBag)
 let next = getIntialPieceCoords(nextPiece, true)
 let ghostPiece = {...piece}
+let holdPiece = null
+let hold = null
+
+
+
 
 const pickNewPiece = (bag) => {
     pieceCoords = {...startingCoords}
@@ -170,8 +188,7 @@ const pickNewPiece = (bag) => {
     return piece
 }
 
-let holdPiece = null
-let hold = null
+
 
 const swapHoldPiece = (piece) => {
   if(!held){
@@ -339,7 +356,7 @@ const drawPiece = (piece,context, ghost = false, alt = false) => {
 
 const keyHandler = (event) => {
   let key = event.key
-  
+  console.log(key)
   switch(key){
     case 'ArrowDown':
       let down =  {x: 0, y: 1}
@@ -349,23 +366,22 @@ const keyHandler = (event) => {
     case 'ArrowRight':
       let right =  {x: 1, y: 0}
       piece = movePiece(piece, right)
-      bottom = true
       ghostPiece = {...piece}
       break;
     case 'ArrowLeft':
         let left =  {x: -1, y: 0}
         piece =  movePiece(piece, left)
-        bottom = true
         ghostPiece = {...piece}
       break;
     case ' ':
         piece = rotate(activePiece)
-        bottom = true
         ghostPiece = {...piece}
          break;
     case 'c':
         piece = swapHoldPiece(piece)
-        break;        
+        break;
+    case 'Escape':
+         currentState = 'playing' === currentState ? 'paused' : 'playing'        
     default:
       let idle = {x: 0, y: 0}
       piece = movePiece(piece, idle)
@@ -374,6 +390,7 @@ const keyHandler = (event) => {
 
 
 let timer = 0
+let hardDropCommit = false
 
 
 
@@ -385,10 +402,11 @@ document.addEventListener('touchend', handleTouchEnd, false)
 document.addEventListener('click',tapHandler)
 
 function tapHandler(event) {
-  event.preventDefault()
-  piece = rotate(activePiece)
-  bottom = true
-  ghostPiece = {...piece}
+  if(!dropped){
+    event.preventDefault()
+    piece = rotate(activePiece)
+    ghostPiece = {...piece}
+  } 
 }
 
 let xDown = null;
@@ -414,67 +432,66 @@ function handleTouchStart(evt) {
 }
 
 function handleTouchMove(evt) {
-  if (!xDown || !yDown) {
-    return;
-  }
-
-  let xUp = evt.touches[0].clientX;
-  let yUp = evt.touches[0].clientY;
-
-  let xDiff = xDown - xUp;
-  let yDiff = yDown - yUp;
-
-  if(!dirEnd){
-    direction = Math.abs(xDiff) > Math.abs(yDiff) ? 'horizontal' : 'vertical'
-  }
-
-  //console.log(dirEnd)
-  console.log(direction)
+  setTimeout(() => {
+    if (!xDown || !yDown) {
+      return;
+    }
   
-
-  if (Math.abs(xDiff) > Math.abs(yDiff)) {
-    //most significant
-    if (xDiff > pxSize * 1.5 && direction === 'horizontal') {
-      let left =  {x: -1, y: 0}
-      piece =  movePiece(piece, left)
-      bottom = true
-      ghostPiece = {...piece}
-      xDown = xUp
-      dirEnd = true   
+    let xUp = evt.touches[0].clientX;
+    let yUp = evt.touches[0].clientY;
   
-    } else if(xDiff < pxSize * -1.5 && direction === 'horizontal'){
-      let right =  {x: 1, y: 0}
-      piece = movePiece(piece, right)
-      bottom = true
-      ghostPiece = {...piece}
-      xDown = xUp   
-      dirEnd = true 
+    let xDiff = xDown - xUp;
+    let yDiff = yDown - yUp;
+  
+    if(!dirEnd){
+      direction = Math.abs(xDiff) > Math.abs(yDiff) ? 'horizontal' : 'vertical'
+    }
+  
+    if (Math.abs(xDiff) > Math.abs(yDiff) && hardDropCommit === false) {
+      //most significant
+      if (xDiff > pxSize * 1.5 ) {
+        let left =  {x: -1, y: 0}
+        piece =  movePiece(piece, left)
+        ghostPiece = {...piece}
+        xDown = xUp
+        dirEnd = true   
     
-    }
-  } else {
-    if (yDiff > 5 * pxSize && direction === 'vertical') {
-      piece = swapHoldPiece(piece)
-      yDown = yUp
-      xDown = xUp
-      dirEnd = true  
-    } 
-    else if(yDiff < pxSize * -2 && direction === 'vertical'){
-      //let down =  {x: 0, y: 1}
-      piece = dropGhostPiece(piece)
-      timer = 0    
-      yDown = yUp
-      xDown = xUp
-      dirEnd = true   
-    }    
-    else if(yDiff < pxSize * -1 && direction === 'vertical'){
-      let down =  {x: 0, y: 1}
-      piece = movePiece(piece, down)
-      timer = 0    
-      yDown = yUp
-      xDown = xUp 
-      dirEnd = true  
+      } else if(xDiff < pxSize * -1.5 && hardDropCommit === false){
+        let right =  {x: 1, y: 0}
+        piece = movePiece(piece, right)
+        ghostPiece = {...piece}
+        xDown = xUp   
+        dirEnd = true 
+      
+      }
+    } else {
+      if (yDiff > 5 * pxSize && direction === 'vertical' && hardDropCommit === false) {
+        piece = swapHoldPiece(piece)
+        yDown = yUp
+        xDown = xUp
+        dirEnd = true  
+      } 
+      else if(yDiff < pxSize * -2 && direction === 'vertical'){
+        //let down =  {x: 0, y: 1}
+        piece = hardDrop(piece)  
+        hardDropCommit = true
+        timer = currentDifficulty
+        lockDelay = 15
+        yDown = 0
+        xDown = 0
+      }    
+      else if(yDiff < pxSize * -1 && direction === 'vertical'){
+        let down =  {x: 0, y: 1}
+        piece = movePiece(piece, down)
+        timer = 0    
+        yDown = yUp
+        xDown = xUp 
+        dirEnd = true  
+      }
     }
   }
+,0)
+  
   // reset values //
   //xDown = xUp;
   //yDown = yDiff;
@@ -491,11 +508,10 @@ const drawWell = (well) => {
 }
 
 
-let bottom = true
+let bottom = false
+let dropped = false
 
-
-
-const dropGhostPiece = (ghostPiece) => {
+const hardDrop = (ghostPiece, ghost = false) => {
   //copy the piece object provide to avoid mutation
   let copy = {...ghostPiece}
   let prev;
@@ -507,12 +523,15 @@ const dropGhostPiece = (ghostPiece) => {
     copy = createPieceFromMove(copy,down)
   }
   //return the previous position prior to finding a collison. 
+  if(!ghost){
+    dropped = true
+  }
     return prev
   
 }
 
 const moveDown = (piece) => {  
-  if(timer > 30){
+  if(timer > currentDifficulty || bottom === true){
     let down =  {x: 0, y: 1}
     let prevCoords = {...pieceCoords}
     piece = movePiece(piece, down)
@@ -520,15 +539,32 @@ const moveDown = (piece) => {
     //or too  put it simply it collided with something. 
     if(pieceCoords.x === prevCoords.x 
       && pieceCoords.y === prevCoords.y){
-    storeInWell(piece)
-    held = false
-    gameWell = lineClear(gameWell,wellWidth,wellHeight)
-    piece = pickNewPiece(pieceBag)
-    if(!verifyNoCollision(piece)){
-      resetGame()
+      bottom = true       
     }
+    else{
+      lockDelay = 0
+      bottom = false
     }
-    timer = 0
+      timer = 0
+    
+  }
+  if(bottom){
+    lockDelay++
+    if(lockDelay === 30){
+      storeInWell(piece)
+      held = false
+      gameWell = lineClear(gameWell,wellWidth,wellHeight)
+      piece = pickNewPiece(pieceBag)
+      if(dropped){
+        dropped = false
+      }
+      if(!verifyNoCollision(piece)){
+       piece = resetGame()
+      }
+      lockDelay = 0
+      bottom = false
+      hardDropCommit = false
+    } 
   }
   timer++
   return piece
@@ -567,6 +603,11 @@ const lineClear = (well) => {
        nullCount = 0
     }
     if(linesCleared > 0){
+      lines += linesCleared
+      points += calculatePoints(linesCleared)
+      level = levelChange(lines)
+      pointsHeading.innerText = String(points)
+      console.log('Level:',level)
       return rebuildWell(well)
     }
     return well
@@ -595,18 +636,64 @@ const topClear = (well) => {
 }
 
 const resetGame = () => {
+  console.log(activePiece)
   gameWell = produceWell(wellWidth,wellHeight)
+  pieceBag = []
+  pieceBag = fillBagIfEmpty(pieceBag,pieces,4)
+  activePiece = pickRandomPiece(pieceBag)
+  piece = getIntialPieceCoords(activePiece)
+  nextPiece = pickRandomPiece(pieceBag)
+  next = getIntialPieceCoords(nextPiece, true)
+  held = false
+  holdPiece = null
+  hold = null
+  ghostPiece = {...piece}
+  points = 0
+  level = 1
+  lines = 0
+  timer = 0
+  currentDifficulty = begginingDifficulty
+  return piece
+}
+
+const levelChange = (lines) => {
+  let newLevel = Math.floor(lines / 10) + 1
+  levelHeading.innerText = `Level ${newLevel}`
+  currentDifficulty = begginingDifficulty - level * 5
+  currentDifficulty = currentDifficulty < 4 ? 4 : currentDifficulty
+  return newLevel
+}
+
+const calculatePoints = (linesCleared) => {
+  let multiplier;
+  switch(linesCleared){
+    case 1:
+      multiplier = 40
+      break;
+    case 2:
+      multiplier = 100
+      break;
+    case 3:
+      multiplier = 300
+      break;
+    case 4: 
+      multiplier = 1200
+      break;
+    default:
+      multiplier = 0
+      break;      
+  }
+  let points = (level) * multiplier
+  return points
 }
 
 
-
-
-const gameLoop = () => {
+const playing = () => {
   ctx.clearRect(0,0,canvasWidth, canvasHeight)
   nextCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
   holdCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
     
-  ghostPiece = dropGhostPiece(ghostPiece)
+  ghostPiece = hardDrop(ghostPiece,true)
   drawPiece(ghostPiece,ctx,true)
   
   drawWell(gameWell)
@@ -614,6 +701,26 @@ const gameLoop = () => {
   drawPiece(next,nextCtx,false,true)
   drawPiece(hold, holdCtx,false,true)
   piece = moveDown(piece)
+}
+
+const paused = () => {
+  ctx.clearRect(0,0,canvasWidth, canvasHeight)
+  nextCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
+  holdCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
+}
+let currentState = 'playing'
+
+const gameLoop = () => {
+  switch(currentState){
+    case 'playing':
+      playing()
+      break;
+    case 'paused':
+      paused()
+      break;
+    case 'main':
+      break;
+  }
 }
 
 setInterval(gameLoop, 1000/60);

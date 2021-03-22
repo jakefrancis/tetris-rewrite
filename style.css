@@ -1,45 +1,55 @@
 body{
   touch-action: manipulation;
+  font-family: 'Roboto', sans-serif;
 }
 
-h1 {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 1rem;
-    color: white;
-    white-space: pre;
-
+.info-container{
+  padding-top: 2rem;
+  margin: 0 auto;
+  max-width: 600px;
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+}
+.points{
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.points-heading{
+  text-align: right;
 }
 
 canvas{
   background-color: black;
 }
 
-.canvas-wrapper{
+.canvas-wrapper{  
+  margin: 0 auto;
+  max-width: 600px;
   display: grid;
   grid-template-columns: 25% 50% 25%;
   grid-template-rows: auto;
   grid-template-areas: 'hold well next';
 }
-
-.well {
+.well{
+  width: auto;
   margin: 0 auto;
+}
+
+.well-wrapper{
+  box-sizing: border-box;
+  text-align: center;
   grid-area: well;
 }
 
 .next {
+  width: auto;
   display: flex;
   align-content: flex-start;
   margin-right: auto;
   grid-area: next;
 }
 .hold {
+  width: auto;
   margin-left: auto;
   grid-area: hold;
-}
-
-@media (max-width: 600px){
-  .canvas-wrapper{
-    max-width: 600px;
-  }  
-
 }
