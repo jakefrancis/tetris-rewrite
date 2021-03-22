@@ -18,6 +18,7 @@ Mobile and touch friendly.
 * Slowly swipe down for soft drop.
 * Quickly swipe down for a hard drop.
 * Swipe up to hold piece.
+* Tap to rotate piece.
 
 
 ## Installation
