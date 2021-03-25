@@ -48,7 +48,6 @@ import {body,container,canvas,
 
   holdCanvas.width = nextCanvas.width = altPx * 5
   holdCanvas.height = nextCanvas.height = altPx * 5
-  canvas.style.background = 'black'
 
   canvas.className='well'
   holdCanvas.className='hold'
@@ -62,21 +61,20 @@ import {body,container,canvas,
 
 //blocks displayed on screen
   class Block {
-      constructor(x,y,color,size){
+      constructor(x,y,color,topColor,size){
         this.size = size
         this.trueCenter = ((holdCanvas.width / 2) - (altPx * this.size / 2)) / altPx
         this.x = x
         this.y = y
         this.color = color
+        this.topColor = topColor
       }
       draw(can) {
-          
-        
         can.fillStyle = `rgb(${this.color[0]},${this.color[1]},${this.color[2]},${this.color[3]})`
         can.fillRect(this.x * pxSize, this.y * pxSize, pxSize, pxSize)
       }
       drawTop(can){
-        can.fillStyle = `rgb(${this.color[0] * 1.2},${this.color[1] * 1.2},${this.color[2] * 1.2},${this.color[3]})`
+        can.fillStyle = this.topColor ? `rgb(${this.topColor[0]},${this.topColor[1]},${this.topColor[2]},${this.topColor[3]})` : `rgb(${this.color[0] * 1.2},${this.color[1] * 1.2},${this.color[2] * 1.2},${this.color[3]})`
         can.fillRect(this.x * pxSize, Math.floor((this.y * pxSize)-  pxSize * .2), pxSize, Math.floor(.3 * pxSize))   
       }
       drawGhost(can){
@@ -149,10 +147,10 @@ const getIntialPieceCoords = (piece,alt = false,) => {
       if(!alt){
         let vecX = x + pieceCoords.x
         let vecY = y + pieceCoords.y
-        coords[`${vecX},${vecY}`] = new Block(vecX,vecY,piece.color)
+        coords[`${vecX},${vecY}`] = new Block(vecX,vecY,piece.color, piece.topColor,piece.gridSize)
       }
       else{
-        coords[`${x},${y}`] = new Block(x,y,piece.color,piece.gridSize)
+        coords[`${x},${y}`] = new Block(x,y,piece.color,piece.topColor,piece.gridSize)
       }
     }
     else{
@@ -320,7 +318,7 @@ const createPieceFromMove = (piece, direction) => {
   for(let block in piece){
     let vecX = piece[block].x + direction.x
     let vecY = piece[block].y + direction.y
-    let square = new Block(vecX,vecY,piece[block].color)    
+    let square = new Block(vecX,vecY,piece[block].color, piece[block].topColor,piece[block].gridSize)    
     let coords = `${vecX},${vecY}`
     newPiece[coords] = square
   }

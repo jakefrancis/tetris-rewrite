@@ -1,4 +1,5 @@
 body{
+
   height: auto;
   touch-action: manipulation;
   font-family: 'Roboto', sans-serif;
@@ -6,8 +7,12 @@ body{
 }
 
 html{
-  background: rgba(34,193,195,1);
-  background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+ 
+}
+
+.content-wrapper{
+  margin: 0 auto;
+  max-width: 600px;
 }
 
 .info-container{
