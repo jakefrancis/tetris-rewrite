@@ -8,6 +8,28 @@ const pastelColors = [
   "#29ab87",
   "#c8a2c8",
 ];
+
+
+
+const hexToValues = (hex) => {
+let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+return result ? [parseInt(result[1],16),parseInt(result[2],16),parseInt(result[3],16),1] 
+: null
+}
+
+const rgbStringToValues = (string) =>  string.match(/[\d\.]+/g).map(val => Number(val))
+
+const convertToValues = (string) => {
+  if(string[0] === 'r'){
+    return rgbStringToValues(string)
+  }
+  else{
+    return hexToValues(string)
+  }
+}
+
+
+
 const paleColors = [
   [255, 240, 245,1],
   [204,204,255,1],

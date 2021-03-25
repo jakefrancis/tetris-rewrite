@@ -718,13 +718,14 @@ const playing = () => {
   holdCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
     
   ghostPiece = hardDrop(ghostPiece,true)
-  drawPiece(ghostPiece,ctx,true)
+ 
   
   
   drawTop(piece,ctx)
-  
+ 
   drawWell(gameWell)
   drawWellTop(gameWell)
+  drawPiece(ghostPiece,ctx,true)
   drawPiece(piece,ctx) 
   drawPiece(next,nextCtx,false,true)
   drawPiece(hold, holdCtx,false,true)
