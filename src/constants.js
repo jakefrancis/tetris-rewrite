@@ -78,17 +78,17 @@ const memphis = [
 "#E397BE",
 "#6FCCC6",
 "#FB4337",
-"#1865B5",
+"#1865B5"
 ]
 
 const memphisTop = [
+  "#1865B5",
   "#FFF85E",
   "#E397BE",
   "#6FCCC6",
   "#FB4337",
-  "#1865B5",
   "#FFF85E",
-  "#E397BE",
+  "#E397BE"
 ]
 
 const  eightiesAlt = [
