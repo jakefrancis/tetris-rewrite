@@ -1,6 +1,18 @@
 body{
+  
+  height: auto;
   touch-action: manipulation;
   font-family: 'Roboto', sans-serif;
+
+}
+
+html{
+ 
+}
+
+.content-wrapper{
+  margin: 0 auto;
+  max-width: 600px;
 }
 
 .info-container{

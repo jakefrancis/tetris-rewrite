@@ -18,9 +18,14 @@ import {body,container,canvas,
   const canvas = document.createElement('canvas')
   const holdCanvas = document.createElement('canvas')
   const nextCanvas = document.createElement('canvas')
+  let fontSize = `${pxSize}px`
 
+  const pointsDescription = document.getElementById('points-description')
+  pointsDescription.style.fontSize = fontSize
   const pointsHeading = document.getElementById('points')
+  pointsHeading.style.fontSize = fontSize
   const levelHeading = document.getElementById('level')
+  levelHeading.style.fontSize = fontSize
 
   const ctx = canvas.getContext('2d')
   const holdCtx = holdCanvas.getContext('2d')
@@ -43,7 +48,6 @@ import {body,container,canvas,
 
   holdCanvas.width = nextCanvas.width = altPx * 5
   holdCanvas.height = nextCanvas.height = altPx * 5
-  canvas.style.background = 'black'
 
   canvas.className='well'
   holdCanvas.className='hold'
@@ -57,26 +61,27 @@ import {body,container,canvas,
 
 //blocks displayed on screen
   class Block {
-      constructor(x,y,color,size){
+      constructor(x,y,color,topColor,size){
         this.size = size
         this.trueCenter = ((holdCanvas.width / 2) - (altPx * this.size / 2)) / altPx
         this.x = x
         this.y = y
         this.color = color
+        this.topColor = topColor
       }
       draw(can) {
-          can.fillStyle = `rgb(${this.color[0] - 50},${this.color[1] - 50},${this.color[2] -50},${this.color[3]})`
-          
-        
         can.fillStyle = `rgb(${this.color[0]},${this.color[1]},${this.color[2]},${this.color[3]})`
         can.fillRect(this.x * pxSize, this.y * pxSize, pxSize, pxSize)
+      }
+      drawTop(can){
+        can.fillStyle = this.topColor ? `rgb(${this.topColor[0]},${this.topColor[1]},${this.topColor[2]},${this.topColor[3]})` : `rgb(${this.color[0] * 1.2},${this.color[1] * 1.2},${this.color[2] * 1.2},${this.color[3]})`
+        can.fillRect(this.x * pxSize, Math.floor((this.y * pxSize)-  pxSize * .2), pxSize, Math.floor(.3 * pxSize))   
       }
       drawGhost(can){
         can.fillStyle = 'rgb(255,255,255,0.3)' 
         can.fillRect(this.x * pxSize, this.y * pxSize, pxSize, pxSize)
       }
       drawAlt(can){
-
         can.fillStyle = 'rgb(255,255,255,1)' 
         can.fillRect(Math.floor((this.x + this.trueCenter) * altPx), Math.floor((this.y + this.trueCenter)* altPx), altPx, altPx)
       }
@@ -142,10 +147,10 @@ const getIntialPieceCoords = (piece,alt = false,) => {
       if(!alt){
         let vecX = x + pieceCoords.x
         let vecY = y + pieceCoords.y
-        coords[`${vecX},${vecY}`] = new Block(vecX,vecY,piece.color)
+        coords[`${vecX},${vecY}`] = new Block(vecX,vecY,piece.color, piece.topColor,piece.gridSize)
       }
       else{
-        coords[`${x},${y}`] = new Block(x,y,piece.color,piece.gridSize)
+        coords[`${x},${y}`] = new Block(x,y,piece.color,piece.topColor,piece.gridSize)
       }
     }
     else{
@@ -313,7 +318,7 @@ const createPieceFromMove = (piece, direction) => {
   for(let block in piece){
     let vecX = piece[block].x + direction.x
     let vecY = piece[block].y + direction.y
-    let square = new Block(vecX,vecY,piece[block].color)    
+    let square = new Block(vecX,vecY,piece[block].color, piece[block].topColor,piece[block].gridSize)    
     let coords = `${vecX},${vecY}`
     newPiece[coords] = square
   }
@@ -352,6 +357,13 @@ const drawPiece = (piece,context, ghost = false, alt = false) => {
       }      
       
     }
+}
+
+const drawTop = (piece, context) =>{
+  if(piece === null) return
+  for(let block in piece){
+    piece[block].drawTop(context)
+  }  
 }
 
 const keyHandler = (event) => {
@@ -501,10 +513,20 @@ const drawWell = (well) => {
     for(let y = 0; y < well.length; y++){
       for(let x = 0;x < well[y].length; x++ ){
         if(well[y][x] !== null){
-          well[y][x].draw(ctx)
+          well[y][x].drawTop(ctx)
         }        
       }
+    } 
+}
+
+const drawWellTop = (well) => {
+  for(let y = 0; y < well.length; y++){
+    for(let x = 0;x < well[y].length; x++ ){
+      if(well[y][x] !== null){
+        well[y][x].draw(ctx)
+      }        
     }
+  }
 }
 
 
@@ -694,9 +716,14 @@ const playing = () => {
   holdCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
     
   ghostPiece = hardDrop(ghostPiece,true)
-  drawPiece(ghostPiece,ctx,true)
+ 
   
+  
+  drawTop(piece,ctx)
+ 
   drawWell(gameWell)
+  drawWellTop(gameWell)
+  drawPiece(ghostPiece,ctx,true)
   drawPiece(piece,ctx) 
   drawPiece(next,nextCtx,false,true)
   drawPiece(hold, holdCtx,false,true)
