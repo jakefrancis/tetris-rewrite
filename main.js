@@ -23,16 +23,20 @@ import {body,container,canvas,
   const startMenu = document.getElementById('start-menu')
   const pauseMenu = document.getElementById('pause-menu')
   const confirmationMenu = document.getElementById('confirmation-menu')
+  const controlsMenu = document.getElementById('controls-menu')
   const yesButton = document.getElementById('yes-button')
   const noButton = document.getElementById('no-button')
   const pauseButton = document.getElementById('pause')
   const pauseIcon = document.getElementById('pause-button')
+  const backButton = document.getElementById('back-button')
 
   pauseIcon.style.width = `${2 * pxSize}px`
 
+  const instructionsButton = document.getElementById('instructions-button')
   const newGameButton = document.getElementById('new-game-button')
   const continueButton = document.getElementById('continue-button')
   const restartButton = document.getElementById('restart-button')
+
   
 
   const setFontSize = (() => {
@@ -101,6 +105,21 @@ import {body,container,canvas,
   }
 
   restartButton.onclick = confirmMenu
+
+  const backToStartMenu = () => {
+    controlsMenu.style.display = 'none'
+    startMenu.display = 'flex'
+  }
+
+  backButton.onclick = backToStartMenu
+
+  const controlsDisplay= () => {
+    startMenu.display = 'none'
+    controlsMenu.style.display = 'flex'
+  }
+
+  instructionsButton.onclick = controlsDisplay
+
 
 
 

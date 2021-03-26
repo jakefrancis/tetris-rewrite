@@ -98,6 +98,22 @@ canvas{
   justify-content: space-evenly;
 }
 
+.controls-menu{
+  background-color: #1865B5;
+  position: absolute;
+  border-radius: 2%;
+  top: 15%;
+  left: 10%;
+  right: 10%;
+  bottom: 15%;  
+  margin: 0 auto;
+  max-width: 600px;
+  display: none;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+}
+
 .pause-menu{
   display: none;
 }
@@ -133,5 +149,10 @@ canvas{
 .menu-description{
   margin: 0;
   text-align: center;
+  color: white;
+}
+
+.list-description{
+  margin: 0;
   color: white;
 }
