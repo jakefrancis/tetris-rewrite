@@ -1,5 +1,4 @@
 body{
-  
   height: auto;
   touch-action: manipulation;
   font-family: 'Roboto', sans-serif;
@@ -7,7 +6,17 @@ body{
 }
 
 html{
+  overflow: hidden;
  
+}
+
+.translucent-mask{
+  height: 95vh;
+  overflow: hidden;
+  margin: 0 auto;
+  max-width: 600px;
+  position: relative;
+  background: black
 }
 
 .content-wrapper{
@@ -16,11 +25,13 @@ html{
 }
 
 .info-container{
+  position: relative;
   padding-top: 2rem;
   margin: 0 auto;
   max-width: 600px;
   display: grid;
   grid-template-columns: 25% 50% 25%;
+  z-index: -1;
 }
 .points{
   text-align: center;
@@ -31,16 +42,21 @@ html{
 }
 
 canvas{
+
   background-color: black;
+
 }
 
 .canvas-wrapper{  
+  height: 95vh;
+  position: relative;
   margin: 0 auto;
   max-width: 600px;
   display: grid;
   grid-template-columns: 25% 50% 25%;
   grid-template-rows: auto;
   grid-template-areas: 'hold well next';
+  z-index: -1;
 }
 .well{
   width: auto;
@@ -64,4 +80,79 @@ canvas{
   width: auto;
   margin-left: auto;
   grid-area: hold;
+}
+
+
+.start-menu,.pause-menu,.confirmation-menu{
+  background-color: #1865B5;
+  position: absolute;
+  border-radius: 2%;
+  top: 35%;
+  left: 10%;
+  right: 10%;
+  bottom: 35%;  
+  margin: 0 auto;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.controls-menu{
+  background-color: #1865B5;
+  position: absolute;
+  border-radius: 2%;
+  top: 15%;
+  left: 10%;
+  right: 10%;
+  bottom: 15%;  
+  margin: 0 auto;
+  max-width: 600px;
+  display: none;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+}
+
+.pause-menu{
+  display: none;
+}
+.confirmation-menu{
+  display: none;
+}
+
+.pause{
+  display: none;
+  position: absolute;
+  border-radius: 2%;
+  right: 8%;
+  bottom: 5%; 
+}
+
+.pause-button {  
+}
+
+.menu-button{
+  padding: 0.5rem;
+  align-self: center;
+  width: 80%;
+  background-color: #3196f5;
+  color: white;
+  border: white solid 1px;
+  border-radius: 2%;
+}
+
+.menu-button:hover{
+  background-color: #63b0f8;
+}
+
+.menu-description{
+  margin: 0;
+  text-align: center;
+  color: white;
+}
+
+.list-description{
+  margin: 0;
+  color: white;
 }

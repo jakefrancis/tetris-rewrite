@@ -18,14 +18,117 @@ import {body,container,canvas,
   const canvas = document.createElement('canvas')
   const holdCanvas = document.createElement('canvas')
   const nextCanvas = document.createElement('canvas')
-  let fontSize = `${pxSize}px`
 
-  const pointsDescription = document.getElementById('points-description')
-  pointsDescription.style.fontSize = fontSize
+  const translucentMask = document.getElementById('translucent-mask')
+  const startMenu = document.getElementById('start-menu')
+  const pauseMenu = document.getElementById('pause-menu')
+  const confirmationMenu = document.getElementById('confirmation-menu')
+  const controlsMenu = document.getElementById('controls-menu')
+  const yesButton = document.getElementById('yes-button')
+  const noButton = document.getElementById('no-button')
+  const pauseButton = document.getElementById('pause')
+  const pauseIcon = document.getElementById('pause-button')
+  const backButton = document.getElementById('back-button')
+
+  pauseIcon.style.width = `${2 * pxSize}px`
+
+  const instructionsButton = document.getElementById('instructions-button')
+  const newGameButton = document.getElementById('new-game-button')
+  const continueButton = document.getElementById('continue-button')
+  const restartButton = document.getElementById('restart-button')
+
+  
+
+  const setFontSize = (() => {
+    let fontSize = `${pxSize}px`
+    let itemSize =`${altPx}px`
+  
+    let menuFonts = document.getElementsByClassName('menu-font')
+    for(let item of menuFonts){
+      item.style.fontSize = fontSize
+    }
+  
+    let itemFonts = document.getElementsByClassName('item-font')
+    for(let item of itemFonts){
+      item.style.fontSize = itemSize
+    }
+  })()
+
+  const newGame = () => {
+    clearAllCanvas()
+    resetGame()
+    currentState = 'playing'
+    translucentMask.style.background = 'none'
+    pauseButton.style.display = 'block'
+    startMenu.style.display = 'none'
+    wrapper.style.zIndex = 0;
+  }
+
+  newGameButton.onclick = newGame
+
+  const continueGame = () => {
+    currentState = 'playing'
+    pauseMenu.style.display = 'none'
+    translucentMask.style.background = 'none'
+    pauseButton.style.display = 'block'
+    wrapper.style.zIndex = 0;    
+  }
+
+  continueButton.onclick = continueGame
+
+
+
+  const pauseGame = () => {
+    currentState = 'paused'
+    pauseButton.style.display = 'none'
+    translucentMask.style.background = `rgb(0,0,0,.5)`
+    pauseMenu.style.display = 'flex'
+    wrapper.style.zIndex = -1;
+  }
+
+  const restartGame = () => {
+    confirmationMenu.style.display = 'none'
+    startMenu.style.display = 'flex'
+    translucentMask.style.background = 'black'    
+  }
+  yesButton.onclick = restartGame
+
+  const returnToPause = () => {
+    confirmationMenu.style.display = 'none'
+    pauseMenu.style.display = 'flex'    
+  }
+  noButton.onclick = returnToPause
+
+  const confirmMenu = () => {
+    pauseMenu.style.display = 'none'
+    confirmationMenu.style.display = 'flex'
+  }
+
+  restartButton.onclick = confirmMenu
+
+  const backToStartMenu = () => {
+    controlsMenu.style.display = 'none'
+    startMenu.display = 'flex'
+  }
+
+  backButton.onclick = backToStartMenu
+
+  const controlsDisplay= () => {
+    startMenu.display = 'none'
+    controlsMenu.style.display = 'flex'
+  }
+
+  instructionsButton.onclick = controlsDisplay
+
+
+
+
+
+  pauseButton.onclick = pauseGame
+
   const pointsHeading = document.getElementById('points')
-  pointsHeading.style.fontSize = fontSize
   const levelHeading = document.getElementById('level')
-  levelHeading.style.fontSize = fontSize
+
 
   const ctx = canvas.getContext('2d')
   const holdCtx = holdCanvas.getContext('2d')
@@ -407,13 +510,16 @@ let hardDropCommit = false
 
 
 window.onkeydown = keyHandler
-document.addEventListener("touchstart", handleTouchStart, false);
-document.addEventListener("touchmove", handleTouchMove, false);
-document.addEventListener('touchend', handleTouchEnd, false)
+wrapper.addEventListener("touchstart", handleTouchStart, false);
+wrapper.addEventListener("touchmove", handleTouchMove, false);
+wrapper.addEventListener('touchend', handleTouchEnd, false)
 
-document.addEventListener('click',tapHandler)
+wrapper.addEventListener('click',tapHandler)
 
 function tapHandler(event) {
+  console.log('tap')
+  if(currentState === 'paused') return
+  console.log('tap')
   if(!dropped){
     event.preventDefault()
     piece = rotate(activePiece)
@@ -444,6 +550,7 @@ function handleTouchStart(evt) {
 }
 
 function handleTouchMove(evt) {
+  evt.preventDefault()
   setTimeout(() => {
     if (!xDown || !yDown) {
       return;
@@ -660,6 +767,7 @@ const topClear = (well) => {
 const resetGame = () => {
   console.log(activePiece)
   gameWell = produceWell(wellWidth,wellHeight)
+  pieceCoords = {...startingCoords}
   pieceBag = []
   pieceBag = fillBagIfEmpty(pieceBag,pieces,4)
   activePiece = pickRandomPiece(pieceBag)
@@ -730,12 +838,12 @@ const playing = () => {
   piece = moveDown(piece)
 }
 
-const paused = () => {
+const clearAllCanvas = () => {
   ctx.clearRect(0,0,canvasWidth, canvasHeight)
   nextCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
   holdCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
 }
-let currentState = 'playing'
+let currentState = 'main'
 
 const gameLoop = () => {
   switch(currentState){
@@ -743,9 +851,10 @@ const gameLoop = () => {
       playing()
       break;
     case 'paused':
-      paused()
+      //paused()
       break;
     case 'main':
+      //paused()
       break;
   }
 }

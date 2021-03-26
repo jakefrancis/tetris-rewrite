@@ -1,24 +1,57 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap&effect=anaglyph" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="style.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     </head>
     <body>
-      <div class='content-wrapper'>
-      <div class='info-container' id='info-container'>
-        <h3 class='points-heading' id='points-description'>Points</h3>
-        <h3 class='points' id='points'>0</h3>
-        <h3 class='level' id='level'>Level 1</h3>
+      <div class='translucent-mask' id='translucent-mask'>
+        <div class='content-wrapper' id='content-wrapper'>
+          <div class='info-container menu-font' id='info-container'>
+            <h3 class='points-heading menu-font' id='points-description'>Points</h3>
+            <h3 class='points menu-font' id='points'>0</h3>
+            <h3 class='level menu-font' id='level'>Level 1</h3>
+          </div>   
+          <div class='canvas-wrapper' id='canvas-wrapper'>
+          </div>
+        </div>
+        <div class='start-menu menu-font menu' id='start-menu'>
+          <h1 class='menu-description' id='menu-id'>TETRIS</h1>
+          <button class='menu-button menu-font' id='instructions-button'>CONTROLS</button>     
+          <button class='menu-button menu-font' id='new-game-button'>NEW GAME</button>  
+        </div>
+        <div class='pause-menu menu-font' id='pause-menu'>
+          <h1 class='menu-description' id='menu-id'>PAUSED</h1>   
+          <button class='menu-button menu-font' id='restart-button'>RESTART</button>
+          <button class='menu-button menu-font' id='continue-button'>CONTINUE</button>    
+        </div>
+        <div class='confirmation-menu menu-font' id='confirmation-menu'>
+          <h1 class='menu-description' id='menu-id'>RESTART?</h1>   
+          <button class='menu-button menu-font' id='yes-button'>YES</button>
+          <button class='menu-button menu-font' id='no-button'>NO</button>    
+        </div>
+        <div class='pause' id='pause'>
+          <img id='pause-button' class='pause-button' src="/src/img/bx-pause-circle.svg">
       </div>
-   
-      <div class='canvas-wrapper' id='canvas-wrapper'>
-
+      <div class='controls-menu'id='controls-menu'>
+          <h3 class='menu-description menu-font'>MOBILE</h3>
+          <ul class='list-description'>
+            <li>Swipe left and right to move.</li>
+            <li>Slowly swipe down for soft drop.</li>
+            <li>Swipe down for hard drop.</li>
+            <li>Swipe up to hold piece.</li>
+            <li>Tap to rotate piece.</li>
+          </ul>
+          <h3 class='menu-description menu-font'>DESKTOP</h3>
+          <ul class='list-description'>
+            <li>Arrow Keys to move.</li>
+            <li>Space to Rotate.</li>
+            <li>C to hold piece.</li>
+          </ul>
+          <button class='menu-button menu-font' id='back-button'>BACK</button>  
+      </div>    
       </div>
-      </div>
-
-
+        
     </body>
     <script type="module" src="main.js"></script>
 </html>
