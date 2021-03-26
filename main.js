@@ -22,12 +22,17 @@ import {body,container,canvas,
   const translucentMask = document.getElementById('translucent-mask')
   const startMenu = document.getElementById('start-menu')
   const pauseMenu = document.getElementById('pause-menu')
+  const confirmationMenu = document.getElementById('confirmation-menu')
+  const yesButton = document.getElementById('yes-button')
+  const noButton = document.getElementById('no-button')
   const pauseButton = document.getElementById('pause')
   const pauseIcon = document.getElementById('pause-button')
+
   pauseIcon.style.width = `${2 * pxSize}px`
 
   const newGameButton = document.getElementById('new-game-button')
   const continueButton = document.getElementById('continue-button')
+  const restartButton = document.getElementById('restart-button')
   
 
   const setFontSize = (() => {
@@ -46,11 +51,13 @@ import {body,container,canvas,
   })()
 
   const newGame = () => {
+    clearAllCanvas()
     resetGame()
     currentState = 'playing'
     translucentMask.style.background = 'none'
     pauseButton.style.display = 'block'
     startMenu.style.display = 'none'
+    wrapper.style.zIndex = 0;
   }
 
   newGameButton.onclick = newGame
@@ -58,8 +65,9 @@ import {body,container,canvas,
   const continueGame = () => {
     currentState = 'playing'
     pauseMenu.style.display = 'none'
-    pauseButton.style.display = 'block'
     translucentMask.style.background = 'none'
+    pauseButton.style.display = 'block'
+    wrapper.style.zIndex = 0;    
   }
 
   continueButton.onclick = continueGame
@@ -69,8 +77,33 @@ import {body,container,canvas,
   const pauseGame = () => {
     currentState = 'paused'
     pauseButton.style.display = 'none'
+    translucentMask.style.background = `rgb(0,0,0,.5)`
     pauseMenu.style.display = 'flex'
+    wrapper.style.zIndex = -1;
   }
+
+  const restartGame = () => {
+    confirmationMenu.style.display = 'none'
+    startMenu.style.display = 'flex'
+    translucentMask.style.background = 'black'    
+  }
+  yesButton.onclick = restartGame
+
+  const returnToPause = () => {
+    confirmationMenu.style.display = 'none'
+    pauseMenu.style.display = 'flex'    
+  }
+  noButton.onclick = returnToPause
+
+  const confirmMenu = () => {
+    pauseMenu.style.display = 'none'
+    confirmationMenu.style.display = 'flex'
+  }
+
+  restartButton.onclick = confirmMenu
+
+
+
 
   pauseButton.onclick = pauseGame
 
@@ -458,9 +491,9 @@ let hardDropCommit = false
 
 
 window.onkeydown = keyHandler
-document.addEventListener("touchstart", handleTouchStart, false);
-document.addEventListener("touchmove", handleTouchMove, false);
-document.addEventListener('touchend', handleTouchEnd, false)
+wrapper.addEventListener("touchstart", handleTouchStart, false);
+wrapper.addEventListener("touchmove", handleTouchMove, false);
+wrapper.addEventListener('touchend', handleTouchEnd, false)
 
 wrapper.addEventListener('click',tapHandler)
 
@@ -715,6 +748,7 @@ const topClear = (well) => {
 const resetGame = () => {
   console.log(activePiece)
   gameWell = produceWell(wellWidth,wellHeight)
+  pieceCoords = {...startingCoords}
   pieceBag = []
   pieceBag = fillBagIfEmpty(pieceBag,pieces,4)
   activePiece = pickRandomPiece(pieceBag)
@@ -785,7 +819,7 @@ const playing = () => {
   piece = moveDown(piece)
 }
 
-const paused = () => {
+const clearAllCanvas = () => {
   ctx.clearRect(0,0,canvasWidth, canvasHeight)
   nextCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
   holdCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
@@ -801,7 +835,7 @@ const gameLoop = () => {
       //paused()
       break;
     case 'main':
-      paused()
+      //paused()
       break;
   }
 }
