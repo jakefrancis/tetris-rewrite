@@ -498,6 +498,7 @@ function handleTouchStart(evt) {
 }
 
 function handleTouchMove(evt) {
+  evt.preventDefault()
   setTimeout(() => {
     if (!xDown || !yDown) {
       return;
@@ -797,7 +798,7 @@ const gameLoop = () => {
       playing()
       break;
     case 'paused':
-      paused()
+      //paused()
       break;
     case 'main':
       paused()

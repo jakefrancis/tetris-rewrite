@@ -1,5 +1,4 @@
 body{
-  
   height: auto;
   touch-action: manipulation;
   font-family: 'Roboto', sans-serif;
@@ -7,14 +6,16 @@ body{
 }
 
 html{
+  overflow: hidden;
  
 }
 
 .translucent-mask{
+  height: 95vh;
+  overflow: hidden;
   margin: 0 auto;
   max-width: 600px;
   position: relative;
-  height: 95vh;
   background: black
 }
 
@@ -93,7 +94,7 @@ canvas{
   max-width: 600px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .pause-menu{
