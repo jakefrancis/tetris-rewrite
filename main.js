@@ -18,8 +18,13 @@ import {body,container,canvas,
   const canvas = document.createElement('canvas')
   const holdCanvas = document.createElement('canvas')
   const nextCanvas = document.createElement('canvas')
+
+  const translucentMask = document.getElementById('translucent-mask')
   const startMenu = document.getElementById('start-menu')
   const pauseMenu = document.getElementById('pause-menu')
+  const pauseButton = document.getElementById('pause')
+  const pauseIcon = document.getElementById('pause-button')
+  pauseIcon.style.width = `${2 * pxSize}px`
 
   const newGameButton = document.getElementById('new-game-button')
   const continueButton = document.getElementById('continue-button')
@@ -43,6 +48,8 @@ import {body,container,canvas,
   const newGame = () => {
     resetGame()
     currentState = 'playing'
+    translucentMask.style.background = 'none'
+    pauseButton.style.display = 'block'
     startMenu.style.display = 'none'
   }
 
@@ -51,6 +58,8 @@ import {body,container,canvas,
   const continueGame = () => {
     currentState = 'playing'
     pauseMenu.style.display = 'none'
+    pauseButton.style.display = 'block'
+    translucentMask.style.background = 'none'
   }
 
   continueButton.onclick = continueGame
@@ -59,8 +68,11 @@ import {body,container,canvas,
 
   const pauseGame = () => {
     currentState = 'paused'
+    pauseButton.style.display = 'none'
     pauseMenu.style.display = 'flex'
   }
+
+  pauseButton.onclick = pauseGame
 
   const pointsHeading = document.getElementById('points')
   const levelHeading = document.getElementById('level')
@@ -450,9 +462,12 @@ document.addEventListener("touchstart", handleTouchStart, false);
 document.addEventListener("touchmove", handleTouchMove, false);
 document.addEventListener('touchend', handleTouchEnd, false)
 
-document.addEventListener('click',tapHandler)
+wrapper.addEventListener('click',tapHandler)
 
 function tapHandler(event) {
+  console.log('tap')
+  if(currentState === 'paused') return
+  console.log('tap')
   if(!dropped){
     event.preventDefault()
     piece = rotate(activePiece)

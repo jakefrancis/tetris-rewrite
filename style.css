@@ -10,17 +10,27 @@ html{
  
 }
 
+.translucent-mask{
+  margin: 0 auto;
+  max-width: 600px;
+  position: relative;
+  height: 95vh;
+  background: black
+}
+
 .content-wrapper{
   margin: 0 auto;
   max-width: 600px;
 }
 
 .info-container{
+  position: relative;
   padding-top: 2rem;
   margin: 0 auto;
   max-width: 600px;
   display: grid;
   grid-template-columns: 25% 50% 25%;
+  z-index: -1;
 }
 .points{
   text-align: center;
@@ -31,16 +41,20 @@ html{
 }
 
 canvas{
+
   background-color: black;
+
 }
 
 .canvas-wrapper{  
+  position: relative;
   margin: 0 auto;
   max-width: 600px;
   display: grid;
   grid-template-columns: 25% 50% 25%;
   grid-template-rows: auto;
   grid-template-areas: 'hold well next';
+  z-index: 0;
 }
 .well{
   width: auto;
@@ -92,9 +106,20 @@ canvas{
   bottom: 35%;  
   margin: 0 auto;
   max-width: 600px;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: space-around;
+}
+
+.pause{
+  display: none;
+  position: absolute;
+  border-radius: 2%;
+  right: 8%;
+  bottom: 5%; 
+}
+
+.pause-button {  
 }
 
 .menu-button{
