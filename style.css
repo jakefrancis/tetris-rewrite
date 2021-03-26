@@ -65,3 +65,54 @@ canvas{
   margin-left: auto;
   grid-area: hold;
 }
+
+
+.start-menu{
+  background-color: #1865B5;
+  position: absolute;
+  border-radius: 2%;
+  top: 35%;
+  left: 10%;
+  right: 10%;
+  bottom: 35%;  
+  margin: 0 auto;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.pause-menu{
+  background-color: #1865B5;
+  position: absolute;
+  border-radius: 2%;
+  top: 35%;
+  left: 10%;
+  right: 10%;
+  bottom: 35%;  
+  margin: 0 auto;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.menu-button{
+  padding: 0.5rem;
+  align-self: center;
+  width: 80%;
+  background-color: #3196f5;
+  color: white;
+  border: white solid 1px;
+  border-radius: 2%;
+}
+
+.menu-button:hover{
+  background-color: #63b0f8;
+}
+
+.menu-description{
+  margin: 0.5rem 0;
+  text-align: center;
+  color: white;
+}

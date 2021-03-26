@@ -18,14 +18,53 @@ import {body,container,canvas,
   const canvas = document.createElement('canvas')
   const holdCanvas = document.createElement('canvas')
   const nextCanvas = document.createElement('canvas')
-  let fontSize = `${pxSize}px`
+  const startMenu = document.getElementById('start-menu')
+  const pauseMenu = document.getElementById('pause-menu')
 
-  const pointsDescription = document.getElementById('points-description')
-  pointsDescription.style.fontSize = fontSize
+  const newGameButton = document.getElementById('new-game-button')
+  const continueButton = document.getElementById('continue-button')
+  
+
+  const setFontSize = (() => {
+    let fontSize = `${pxSize}px`
+    let itemSize =`${altPx}px`
+  
+    let menuFonts = document.getElementsByClassName('menu-font')
+    for(let item of menuFonts){
+      item.style.fontSize = fontSize
+    }
+  
+    let itemFonts = document.getElementsByClassName('item-font')
+    for(let item of itemFonts){
+      item.style.fontSize = itemSize
+    }
+  })()
+
+  const newGame = () => {
+    resetGame()
+    currentState = 'playing'
+    startMenu.style.display = 'none'
+  }
+
+  newGameButton.onclick = newGame
+
+  const continueGame = () => {
+    currentState = 'playing'
+    pauseMenu.style.display = 'none'
+  }
+
+  continueButton.onclick = continueGame
+
+
+
+  const pauseGame = () => {
+    currentState = 'paused'
+    pauseMenu.style.display = 'flex'
+  }
+
   const pointsHeading = document.getElementById('points')
-  pointsHeading.style.fontSize = fontSize
   const levelHeading = document.getElementById('level')
-  levelHeading.style.fontSize = fontSize
+
 
   const ctx = canvas.getContext('2d')
   const holdCtx = holdCanvas.getContext('2d')
@@ -735,7 +774,7 @@ const paused = () => {
   nextCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
   holdCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
 }
-let currentState = 'playing'
+let currentState = 'main'
 
 const gameLoop = () => {
   switch(currentState){
@@ -746,6 +785,7 @@ const gameLoop = () => {
       paused()
       break;
     case 'main':
+      paused()
       break;
   }
 }
