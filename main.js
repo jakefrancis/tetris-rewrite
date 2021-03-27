@@ -601,7 +601,7 @@ wrapper.addEventListener('click',tapHandler)
 function tapHandler(event) {
 if(currentState === 'paused') return
   if(!dropped){
-    window.navigator.vibrate(10)
+    vibrate()
     event.preventDefault()
     piece = rotate(activePiece)
     ghostPiece = {...piece}
