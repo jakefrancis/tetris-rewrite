@@ -24,6 +24,8 @@ import {body,container,canvas,
   const pauseMenu = document.getElementById('pause-menu')
   const confirmationMenu = document.getElementById('confirmation-menu')
   const controlsMenu = document.getElementById('controls-menu')
+  const optionsMenu = document.getElementById('options-menu')
+  const optionsButton = document.getElementById('options-button')
   const yesButton = document.getElementById('yes-button')
   const noButton = document.getElementById('no-button')
   const pauseButton = document.getElementById('pause')
@@ -139,6 +141,9 @@ import {body,container,canvas,
   }
 
   instructionsButton.onclick = controlsDisplay
+
+
+
 
 
 
