@@ -83,7 +83,7 @@ canvas{
 }
 
 
-.start-menu,.pause-menu,.confirmation-menu{
+.start-menu,.pause-menu,.confirmation-menu,.options-menu{
   background-color: #1865B5;
   position: absolute;
   border-radius: 2%;
@@ -112,6 +112,10 @@ canvas{
   flex-direction: column;
   justify-content: space-evenly;
 
+}
+
+.options-menu{
+  display: none;
 }
 
 .pause-menu{
