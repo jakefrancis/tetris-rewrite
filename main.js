@@ -25,12 +25,19 @@ import {body,container,canvas,
   const confirmationMenu = document.getElementById('confirmation-menu')
   const controlsMenu = document.getElementById('controls-menu')
   const optionsMenu = document.getElementById('options-menu')
-  const optionsButton = document.getElementById('options-button')
+  const optionsButton = document.getElementById('options-main-button')
+
+  const backOptionsButton = document.getElementById('back-options-button')
+  const backPauseOptionsButton = document.getElementById('back-pause-options-button')
+  const optionsPauseButton = document.getElementById('options-pause-button')
+  const vibrateButton = document.getElementById('vibrate-button')
+  const soundButton = document.getElementById('sound-button')
+
   const yesButton = document.getElementById('yes-button')
   const noButton = document.getElementById('no-button')
   const pauseButton = document.getElementById('pause')
   const pauseIcon = document.getElementById('pause-button')
-  const backButton = document.getElementById('back-button')
+  const backControlsButton = document.getElementById('back-controls-button')
 
   pauseIcon.style.width = `${2 * pxSize}px`
 
@@ -42,6 +49,7 @@ import {body,container,canvas,
   let vibrationOn = true
 
   if (!navigator.vibrate) {
+    vibrateButton.style.display = 'none'
     vibrationOn = false
   }
 
@@ -126,13 +134,13 @@ import {body,container,canvas,
 
   restartButton.onclick = confirmMenu
 
-  const backToStartMenu = () => {
+  const controlsBackToStartMenu = () => {
     controlsMenu.style.display = 'none'
     startMenu.display = 'flex'
     vibrate()
   }
 
-  backButton.onclick = backToStartMenu
+  backControlsButton.onclick = controlsBackToStartMenu
 
   const controlsDisplay= () => {
     startMenu.display = 'none'
@@ -141,6 +149,54 @@ import {body,container,canvas,
   }
 
   instructionsButton.onclick = controlsDisplay
+
+  const optionsDisplay = () => {
+    startMenu.style.display ='none'
+    optionsMenu.style.display = 'flex'
+    vibrate()
+  }
+
+  optionsButton.onclick = optionsDisplay
+
+  const optionsPauseDisplay = () => {
+    pauseMenu.style.display = 'none'
+    backOptionsButton.style.display = 'none'
+    backPauseOptionsButton.style.display = 'block'
+    optionsMenu.style.display = 'flex'
+    vibrate()
+  }
+
+  optionsPauseButton.onclick = optionsPauseDisplay
+
+  const optionsBackToStartMenu = () => {
+    optionsMenu.style.display = 'none'
+    startMenu.style.display = 'flex'
+    vibrate()
+  }
+  
+  backOptionsButton.onclick = optionsBackToStartMenu
+
+  const optionsBackToPauseMenu = () => {
+    optionsMenu.style.display = 'none'
+    backOptionsButton.style.display = 'block'
+    backPauseOptionsButton.style.display = 'none'
+    pauseMenu.style.display ='flex'
+    vibrate()
+  }
+
+  backPauseOptionsButton.onclick = optionsBackToPauseMenu
+
+
+
+  const toggleVibration = () => {
+    vibrationOn = !vibrationOn
+    vibrateButton.innerText = vibrationOn ? 'VIBRATION IS ON': 'VIBRATION IS OFF'
+    vibrate()
+  }
+
+  vibrateButton.onclick = toggleVibration
+
+
 
 
 
