@@ -83,19 +83,23 @@ canvas{
 }
 
 
-.start-menu,.pause-menu,.confirmation-menu,.options-menu{
+.start-menu,.pause-menu,.confirmation-menu,.options-menu,.game-over-menu{
   background-color: #1865B5;
   position: absolute;
   border-radius: 2%;
   top: 35%;
   left: 10%;
   right: 10%;
-  bottom: 35%;  
+  bottom: 30%;  
   margin: 0 auto;
   max-width: 600px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+}
+
+.game-over-menu {
+  display: none;
 }
 
 .controls-menu{

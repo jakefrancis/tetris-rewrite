@@ -39,6 +39,10 @@ import {body,container,canvas,
   const pauseIcon = document.getElementById('pause-button')
   const backControlsButton = document.getElementById('back-controls-button')
 
+  const gameOverMenu = document.getElementById('game-over-menu')
+  const gameOverScore =  document.getElementById('score-id')
+  const newGameOverButton = document.getElementById('new-game-over-button')
+
   pauseIcon.style.width = `${2 * pxSize}px`
 
   const instructionsButton = document.getElementById('instructions-button')
@@ -82,6 +86,7 @@ import {body,container,canvas,
     currentState = 'playing'
     translucentMask.style.background = 'none'
     pauseButton.style.display = 'block'
+    gameOverMenu.style.display = 'none'
     startMenu.style.display = 'none'
     wrapper.style.zIndex = 0;
     vibrate()
@@ -195,6 +200,14 @@ import {body,container,canvas,
   }
 
   vibrateButton.onclick = toggleVibration
+
+
+  const gameOverDisplay = () => {
+      gameOverMenu.style.display = 'flex'
+      gameOverScore.innerText = `SCORE: ${points}`
+  }
+
+  newGameOverButton.onclick = newGame
 
 
 
@@ -902,8 +915,8 @@ const phaseWell = () => {
       if(phaseCoords.y > 22){
         phaseCoords = {x : 0,y : 0}
         currentState = 'paused'
+        gameOverDisplay()
         piece = resetGame()
-        newGame()
       }
     }
   }
