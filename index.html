@@ -16,21 +16,28 @@
           </div>
         </div>
         <div class='start-menu menu-font menu' id='start-menu'>
-          <h1 class='menu-description' id='menu-id'>TETRIS</h1>
+          <h1 class='menu-description' id='tetris-id'>TETRIS</h1>
           <button class='menu-button menu-font' id='instructions-button'>CONTROLS</button>
-          <button class='menu-button menu-font' id='options-button'>OPTIONS</button>     
+          <button class='menu-button menu-font' id='options-main-button'>OPTIONS</button>     
           <button class='menu-button menu-font' id='new-game-button'>NEW GAME</button>  
         </div>
         <div class='pause-menu menu-font' id='pause-menu'>
-          <h1 class='menu-description' id='menu-id'>PAUSED</h1>   
+          <h1 class='menu-description' id='paused-id'>PAUSED</h1>   
           <button class='menu-button menu-font' id='restart-button'>RESTART</button>
-          <button class='menu-button menu-font' id='options-button'>OPTIONS</button> 
+          <button class='menu-button menu-font' id='options-pause-button'>OPTIONS</button> 
           <button class='menu-button menu-font' id='continue-button'>CONTINUE</button>    
         </div>
         <div class='confirmation-menu menu-font' id='confirmation-menu'>
-          <h1 class='menu-description' id='menu-id'>RESTART?</h1>   
+          <h1 class='menu-description' id='restart-id'>RESTART?</h1>   
           <button class='menu-button menu-font' id='yes-button'>YES</button>
           <button class='menu-button menu-font' id='no-button'>NO</button>    
+        </div>
+        <div class='options-menu menu-font' id='options-menu'>
+          <h1 class='menu-description' id='options-id'>OPTIONS</h1>   
+          <button class='menu-button menu-font' id='vibrate-button'>VIBRATION IS ON</button>
+          <button class='menu-button menu-font' id='sound-button' style='display: none;'>SOUND IS ON</button>
+          <button class='menu-button menu-font' id='back-options-button'>BACK</button>
+          <button class='menu-button menu-font' id='back-pause-options-button' style='display: none;'>BACK</button>  
         </div>
         <div class='pause' id='pause'>
           <img id='pause-button' class='pause-button' src="/src/img/bx-pause-circle.svg">
@@ -50,7 +57,12 @@
             <li>Space to Rotate.</li>
             <li>C to hold piece.</li>
           </ul>
-          <button class='menu-button menu-font' id='back-button'>BACK</button>  
+          <button class='menu-button menu-font' id='back-controls-button'>BACK</button>  
+      </div>
+      <div class='game-over-menu menu-font' id='game-over-menu'>
+        <h1 class='menu-description' id='game-over-id'>GAME OVER</h1>
+        <h3 class='menu-description' id='score-id'>SCORE: 10</h3>
+        <button class='menu-button menu-font' id='new-game-over-button'>NEW GAME</button>
       </div>    
       </div>
         
