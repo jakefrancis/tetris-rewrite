@@ -39,6 +39,10 @@ import {body,container,canvas,
 
   let vibrationOn = true
 
+  if (!navigator.vibrate) {
+    vibrationOn = false
+  }
+
   const vibrate = (length = 10) => {
     if(vibrationOn){
       window.navigator.vibrate(length)
@@ -309,6 +313,7 @@ const pickNewPiece = (bag) => {
     next = getIntialPieceCoords(nextPiece,true)
     piece = getIntialPieceCoords(activePiece)
     ghostPiece = {...piece}
+    //vibrate()
     return piece
 }
 
@@ -533,9 +538,7 @@ wrapper.addEventListener('touchend', handleTouchEnd, false)
 wrapper.addEventListener('click',tapHandler)
 
 function tapHandler(event) {
-  console.log('tap')
-  if(currentState === 'paused') return
-  console.log('tap')
+if(currentState === 'paused') return
   if(!dropped){
     window.navigator.vibrate(10)
     event.preventDefault()
@@ -618,7 +621,7 @@ function handleTouchMove(evt) {
         lockDelay = 15
         yDown = 0
         xDown = 0
-        vibrate(100)
+        vibrate(30)
       }    
       else if(yDiff < pxSize * -1 && direction === 'vertical'){
         let down =  {x: 0, y: 1}
@@ -711,6 +714,7 @@ const moveDown = (piece) => {
       }
       if(!verifyNoCollision(piece)){
         currentState = 'game over'
+        pauseButton.style.display = 'none'
       }
       lockDelay = 0
       bottom = false
@@ -759,6 +763,12 @@ const lineClear = (well) => {
       level = levelChange(lines)
       pointsHeading.innerText = String(points)
       console.log('Level:',level)
+      let vibes = []
+      for(let i = 0; i < linesCleared; i++){
+        vibes.push(100)
+        vibes.push(30)
+      }
+      vibrate(vibes)
       return rebuildWell(well)
     }
     return well
@@ -817,11 +827,12 @@ const levelChange = (lines) => {
 }
 
 let phaseCount = 0
-let phaseSpeed = 3
+let phaseSpeed = 2
 let phaseCoords = {x : 0,y : 0}
 
 const phaseWell = () => {
   if(phaseCount >= phaseSpeed){
+    phase(phaseCoords.x,phaseCoords.y)
     phaseCount = 0
     phaseCoords.x = phaseCoords.x + 1
     if(phaseCoords.x > 9){
@@ -835,12 +846,13 @@ const phaseWell = () => {
       }
     }
   }
-  phase(phaseCoords.x,phaseCoords.y)
+  
   phaseCount++
 }
 
 const phase = (x,y) => {
   if(gameWell[y][x]){
+    vibrate()
     gameWell[y][x].color[3] = 0
     gameWell[y][x].topColor[3] = 0
   }
