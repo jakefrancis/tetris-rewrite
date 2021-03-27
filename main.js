@@ -37,6 +37,14 @@ import {body,container,canvas,
   const continueButton = document.getElementById('continue-button')
   const restartButton = document.getElementById('restart-button')
 
+  let vibrationOn = true
+
+  const vibrate = (length = 10) => {
+    if(vibrationOn){
+      window.navigator.vibrate(length)
+    }    
+  } 
+
   
 
   const setFontSize = (() => {
@@ -56,12 +64,13 @@ import {body,container,canvas,
 
   const newGame = () => {
     clearAllCanvas()
-    resetGame()
+    piece = resetGame()
     currentState = 'playing'
     translucentMask.style.background = 'none'
     pauseButton.style.display = 'block'
     startMenu.style.display = 'none'
     wrapper.style.zIndex = 0;
+    vibrate()
   }
 
   newGameButton.onclick = newGame
@@ -71,7 +80,8 @@ import {body,container,canvas,
     pauseMenu.style.display = 'none'
     translucentMask.style.background = 'none'
     pauseButton.style.display = 'block'
-    wrapper.style.zIndex = 0;    
+    wrapper.style.zIndex = 0;
+    vibrate()    
   }
 
   continueButton.onclick = continueGame
@@ -84,24 +94,28 @@ import {body,container,canvas,
     translucentMask.style.background = `rgb(0,0,0,.5)`
     pauseMenu.style.display = 'flex'
     wrapper.style.zIndex = -1;
+    vibrate()
   }
 
   const restartGame = () => {
     confirmationMenu.style.display = 'none'
     startMenu.style.display = 'flex'
-    translucentMask.style.background = 'black'    
+    translucentMask.style.background = 'black'
+    vibrate()    
   }
   yesButton.onclick = restartGame
 
   const returnToPause = () => {
     confirmationMenu.style.display = 'none'
-    pauseMenu.style.display = 'flex'    
+    pauseMenu.style.display = 'flex'
+    vibrate()    
   }
   noButton.onclick = returnToPause
 
   const confirmMenu = () => {
     pauseMenu.style.display = 'none'
     confirmationMenu.style.display = 'flex'
+    vibrate()
   }
 
   restartButton.onclick = confirmMenu
@@ -109,6 +123,7 @@ import {body,container,canvas,
   const backToStartMenu = () => {
     controlsMenu.style.display = 'none'
     startMenu.display = 'flex'
+    vibrate()
   }
 
   backButton.onclick = backToStartMenu
@@ -116,6 +131,7 @@ import {body,container,canvas,
   const controlsDisplay= () => {
     startMenu.display = 'none'
     controlsMenu.style.display = 'flex'
+    vibrate()
   }
 
   instructionsButton.onclick = controlsDisplay
@@ -250,10 +266,10 @@ const getIntialPieceCoords = (piece,alt = false,) => {
       if(!alt){
         let vecX = x + pieceCoords.x
         let vecY = y + pieceCoords.y
-        coords[`${vecX},${vecY}`] = new Block(vecX,vecY,piece.color, piece.topColor,piece.gridSize)
+        coords[`${vecX},${vecY}`] = new Block(vecX,vecY,[...piece.color], [...piece.topColor],piece.gridSize)
       }
       else{
-        coords[`${x},${y}`] = new Block(x,y,piece.color,piece.topColor,piece.gridSize)
+        coords[`${x},${y}`] = new Block(x,y,[...piece.color],[...piece.topColor],piece.gridSize)
       }
     }
     else{
@@ -521,6 +537,7 @@ function tapHandler(event) {
   if(currentState === 'paused') return
   console.log('tap')
   if(!dropped){
+    window.navigator.vibrate(10)
     event.preventDefault()
     piece = rotate(activePiece)
     ghostPiece = {...piece}
@@ -573,7 +590,8 @@ function handleTouchMove(evt) {
         piece =  movePiece(piece, left)
         ghostPiece = {...piece}
         xDown = xUp
-        dirEnd = true   
+        dirEnd = true
+        vibrate()   
     
       } else if(xDiff < pxSize * -1.5 && hardDropCommit === false){
         let right =  {x: 1, y: 0}
@@ -581,6 +599,7 @@ function handleTouchMove(evt) {
         ghostPiece = {...piece}
         xDown = xUp   
         dirEnd = true 
+        vibrate()   
       
       }
     } else {
@@ -588,7 +607,8 @@ function handleTouchMove(evt) {
         piece = swapHoldPiece(piece)
         yDown = yUp
         xDown = xUp
-        dirEnd = true  
+        dirEnd = true
+        vibrate()  
       } 
       else if(yDiff < pxSize * -2 && direction === 'vertical'){
         //let down =  {x: 0, y: 1}
@@ -598,6 +618,7 @@ function handleTouchMove(evt) {
         lockDelay = 15
         yDown = 0
         xDown = 0
+        vibrate(100)
       }    
       else if(yDiff < pxSize * -1 && direction === 'vertical'){
         let down =  {x: 0, y: 1}
@@ -605,7 +626,8 @@ function handleTouchMove(evt) {
         timer = 0    
         yDown = yUp
         xDown = xUp 
-        dirEnd = true  
+        dirEnd = true 
+        vibrate()  
       }
     }
   }
@@ -688,7 +710,7 @@ const moveDown = (piece) => {
         dropped = false
       }
       if(!verifyNoCollision(piece)){
-       piece = resetGame()
+        currentState = 'game over'
       }
       lockDelay = 0
       bottom = false
@@ -794,6 +816,40 @@ const levelChange = (lines) => {
   return newLevel
 }
 
+let phaseCount = 0
+let phaseSpeed = 3
+let phaseCoords = {x : 0,y : 0}
+
+const phaseWell = () => {
+  if(phaseCount >= phaseSpeed){
+    phaseCount = 0
+    phaseCoords.x = phaseCoords.x + 1
+    if(phaseCoords.x > 9){
+      phaseCoords.x = 0
+      phaseCoords.y = phaseCoords.y + 1
+      if(phaseCoords.y > 22){
+        phaseCoords = {x : 0,y : 0}
+        currentState = 'paused'
+        piece = resetGame()
+        newGame()
+      }
+    }
+  }
+  phase(phaseCoords.x,phaseCoords.y)
+  phaseCount++
+}
+
+const phase = (x,y) => {
+  if(gameWell[y][x]){
+    gameWell[y][x].color[3] = 0
+    gameWell[y][x].topColor[3] = 0
+  }
+  else{
+    phaseCount = phaseSpeed
+  }
+    
+}
+
 const calculatePoints = (linesCleared) => {
   let multiplier;
   switch(linesCleared){
@@ -838,6 +894,15 @@ const playing = () => {
   piece = moveDown(piece)
 }
 
+const gameOver = () => {
+  ctx.clearRect(0,0,canvasWidth, canvasHeight)
+  nextCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
+  holdCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
+  phaseWell()
+  drawWell(gameWell)
+  drawWellTop(gameWell)
+}
+
 const clearAllCanvas = () => {
   ctx.clearRect(0,0,canvasWidth, canvasHeight)
   nextCtx.clearRect(0,0,pxSize * 5, pxSize * 5)
@@ -853,8 +918,8 @@ const gameLoop = () => {
     case 'paused':
       //paused()
       break;
-    case 'main':
-      //paused()
+    case 'game over':
+      gameOver()
       break;
   }
 }
