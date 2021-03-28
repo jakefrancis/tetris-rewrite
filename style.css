@@ -83,7 +83,7 @@ canvas{
 }
 
 
-.start-menu,.pause-menu,.confirmation-menu,.options-menu,.game-over-menu{
+.start-menu,.pause-menu,.confirmation-menu,.options-menu,.game-over-menu,.controls-menu,.mobile-controls-menu,.desktop-controls-menu{
   background-color: #1865B5;
   position: absolute;
   border-radius: 2%;
@@ -102,21 +102,6 @@ canvas{
   display: none;
 }
 
-.controls-menu{
-  background-color: #1865B5;
-  position: absolute;
-  border-radius: 2%;
-  top: 15%;
-  left: 10%;
-  right: 10%;
-  bottom: 15%;  
-  margin: 0 auto;
-  max-width: 600px;
-  display: none;
-  flex-direction: column;
-  justify-content: space-evenly;
-
-}
 
 .options-menu{
   display: none;
@@ -125,7 +110,22 @@ canvas{
 .pause-menu{
   display: none;
 }
+
 .confirmation-menu{
+  display: none;
+}
+
+.mobile-controls-menu,.desktop-controls-menu{
+  display: none;
+  top: 5%;
+  left: 10%;
+  right: 10%;
+  bottom: 5%;  
+}
+
+
+
+.controls-menu{
   display: none;
 }
 
@@ -160,7 +160,13 @@ canvas{
   color: white;
 }
 
+.list-wrapper{
+  color: white;
+  margin: 0 auto;
+  width: 90%;
+}
 .list-description{
-  margin: 0;
+  padding-left: 0;
+  list-style: none;
   color: white;
 }

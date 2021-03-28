@@ -26,6 +26,11 @@ import {body,container,canvas,
   const controlsMenu = document.getElementById('controls-menu')
   const optionsMenu = document.getElementById('options-menu')
   const optionsButton = document.getElementById('options-main-button')
+  const listDescription = document.getElementsByClassName('list-wrapper')
+  console.log(listDescription)
+  for(let i = 0; i < listDescription.length; i++){
+    listDescription[i].style.fontSize = `${1.6 * altPx}px`
+  }
 
   const backOptionsButton = document.getElementById('back-options-button')
   const backPauseOptionsButton = document.getElementById('back-pause-options-button')
@@ -46,13 +51,26 @@ import {body,container,canvas,
   pauseIcon.style.width = `${2 * pxSize}px`
 
   const instructionsButton = document.getElementById('instructions-button')
+  const mobileControlsButton = document.getElementById('mobile-controls-button')
+  const desktopControlsButton = document.getElementById('desktop-controls-button')
+
+  const mobileControlsMenu = document.getElementById('mobile-controls-menu')
+  const desktopControlsMenu = document.getElementById('desktop-controls-menu')
+
+  const mobileControlsBackButton = document.getElementById('mobile-controls-back-button')
+  const desktopControlsBackButton = document.getElementById('desktop-controls-back-button')
+  
+
   const newGameButton = document.getElementById('new-game-button')
   const continueButton = document.getElementById('continue-button')
   const restartButton = document.getElementById('restart-button')
 
   let vibrationOn = true
 
+  //validates if browser is capable of handling the vibrate function
+  //disables the ability to toggle the vibrate function on and off
   if (!navigator.vibrate) {
+    optionsButton.style.display = 'none'
     vibrateButton.style.display = 'none'
     vibrationOn = false
   }
@@ -83,6 +101,8 @@ import {body,container,canvas,
   const newGame = () => {
     clearAllCanvas()
     piece = resetGame()
+    pointsHeading.innerText = 0
+    levelHeading.innerText = 'Level 1'
     currentState = 'playing'
     translucentMask.style.background = 'none'
     pauseButton.style.display = 'block'
@@ -203,12 +223,45 @@ import {body,container,canvas,
 
 
   const gameOverDisplay = () => {
+      console.log('over')
       gameOverMenu.style.display = 'flex'
       gameOverScore.innerText = `SCORE: ${points}`
   }
 
   newGameOverButton.onclick = newGame
 
+  const displayMobileControls = () => {
+     controlsMenu.style.display = 'none'
+     mobileControlsMenu.style.display = 'flex'
+     vibrate()
+  }
+
+  mobileControlsButton.onclick = displayMobileControls
+
+  const mobileControlsBack = () => {
+    mobileControlsMenu.style.display = 'none'
+    controlsMenu.style.display = 'flex'
+    vibrate()
+  }
+
+  mobileControlsBackButton.onclick = mobileControlsBack
+
+  const displayDesktopControls = () => {
+    controlsMenu.style.display = 'none'
+    desktopControlsMenu.style.display = 'flex'
+    vibrate()
+ }
+
+ desktopControlsButton.onclick = displayDesktopControls
+
+
+ const desktopControlsBack = () => {
+  desktopControlsMenu.style.display = 'none'
+  controlsMenu.style.display = 'flex'
+  vibrate()
+}
+
+desktopControlsBackButton.onclick =  desktopControlsBack
 
 
 
@@ -373,6 +426,7 @@ let piece = getIntialPieceCoords(activePiece)
 let nextPiece = pickRandomPiece(pieceBag)
 let next = getIntialPieceCoords(nextPiece, true)
 let ghostPiece = {...piece}
+let potentialHold = {...activePiece}
 let holdPiece = null
 let hold = null
 
@@ -382,6 +436,7 @@ let hold = null
 const pickNewPiece = (bag) => {
     pieceCoords = {...startingCoords}
     activePiece = {...nextPiece}
+    potentialHold = {...activePiece}
     nextPiece = pickRandomPiece(bag)
     pieceBag = fillBagIfEmpty(bag,pieces,2)
     next = getIntialPieceCoords(nextPiece,true)
@@ -398,7 +453,7 @@ const swapHoldPiece = (piece) => {
     if(holdPiece !== null){
       pieceCoords = {...startingCoords}
       let holdCopy = {...holdPiece}
-      holdPiece = {...activePiece}
+      holdPiece = {...potentialHold}
       activePiece = holdCopy
       hold = getIntialPieceCoords(holdPiece, true)
       piece = getIntialPieceCoords(activePiece)
@@ -407,7 +462,7 @@ const swapHoldPiece = (piece) => {
       return piece
     }
     else{
-      holdPiece = {...activePiece}
+      holdPiece = {...potentialHold}
       hold = getIntialPieceCoords(holdPiece,true)
       piece = pickNewPiece(pieceBag)
       held = true
@@ -591,7 +646,10 @@ const keyHandler = (event) => {
         piece = swapHoldPiece(piece)
         break;
     case 'Escape':
-         currentState = 'playing' === currentState ? 'paused' : 'playing'        
+      if(currentState === 'playing'){
+        pauseGame() 
+      }
+               
     default:
       let idle = {x: 0, y: 0}
       piece = movePiece(piece, idle)
@@ -906,7 +964,7 @@ let phaseCoords = {x : 0,y : 0}
 
 const phaseWell = () => {
   if(phaseCount >= phaseSpeed){
-    phase(phaseCoords.x,phaseCoords.y)
+    
     phaseCount = 0
     phaseCoords.x = phaseCoords.x + 1
     if(phaseCoords.x > 9){
@@ -920,12 +978,12 @@ const phaseWell = () => {
       }
     }
   }
-  
+  phase(phaseCoords.x,phaseCoords.y)
   phaseCount++
 }
 
 const phase = (x,y) => {
-  if(gameWell[y][x]){
+  if(gameWell[y][x] !== null){
     vibrate()
     gameWell[y][x].color[3] = 0
     gameWell[y][x].topColor[3] = 0

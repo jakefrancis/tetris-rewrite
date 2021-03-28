@@ -1,0 +1,15 @@
+ <li>Swipe left or right to move</li>
+              <li>Swipe down slowly for soft drop</li>
+              <li>Swipe down for hard drop</li>
+              <li>Swipe up to hold piece.</li>
+              <li>Tap to rotate piece.</li>
+
+
+               <h3 class='menu-description menu-font'>DESKTOP</h3>
+          <div class='list-wrapper'>
+            <ul class='list-description'>
+              <li>Arrow Keys to move.</li>
+              <li>Space to Rotate.</li>
+              <li>C to hold piece.</li>
+            </ul>
+          </div>  

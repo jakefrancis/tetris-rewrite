@@ -42,23 +42,38 @@
         <div class='pause' id='pause'>
           <img id='pause-button' class='pause-button' src="/src/img/bx-pause-circle.svg">
       </div>
-      <div class='controls-menu'id='controls-menu'>
-          <h3 class='menu-description menu-font'>MOBILE</h3>
-          <ul class='list-description'>
-            <li>Swipe left and right to move.</li>
-            <li>Slowly swipe down for soft drop.</li>
-            <li>Swipe down for hard drop.</li>
-            <li>Swipe up to hold piece.</li>
-            <li>Tap to rotate piece.</li>
-          </ul>
-          <h3 class='menu-description menu-font'>DESKTOP</h3>
-          <ul class='list-description'>
-            <li>Arrow Keys to move.</li>
-            <li>Space to Rotate.</li>
-            <li>C to hold piece.</li>
-          </ul>
+      <div class='controls-menu menu-font'id='controls-menu'>
+        <h1 class='menu-description' id='controls-id'>CONTROLS</h1>  
+          <button class='menu-button menu-font' id='mobile-controls-button'>MOBILE</button>
+          <button class='menu-button menu-font' id='desktop-controls-button'>DESKTOP</button> 
           <button class='menu-button menu-font' id='back-controls-button'>BACK</button>  
       </div>
+      <div class='mobile-controls-menu'id='mobile-controls-menu'>
+        <h3 class='menu-description menu-font'>MOBILE</h3>
+        <div class='list-wrapper'>
+              <p>Swiping the screen left or right will move your piece to the left or right.</p>
+              <p>Tapping the screen rotates the piece.</p>
+              <p>You can make the piece fall faster by performing a Hard Drop or a Soft Drop</p>
+              <p>A Hard Drop is performed by quickly swiping the screen down. This will lock your piece into place and you'll be given a new piece.</p>
+              <p>To Soft Drop slowly drag down on the screen. You can still move your piece when it makes contact with another piece or the bottom of the well for a short amount of time.</p>
+              <p>You can store a piece for later by swiping up on the screen. If another piece has already been stored you will switch the new piece for the stored piece</p>
+              <p>Your piece can't be switched out the same turn it was stored</p>         
+        </div>                
+        <button class='menu-button menu-font' id='mobile-controls-back-button'>BACK</button>  
+    </div>
+    <div class='desktop-controls-menu menu-font'id='desktop-controls-menu'>
+      <h3 class='menu-description menu-font'>DESKTOP</h3>
+      <div class='list-wrapper'>
+            <p>Pressing the left or right arrow keys will move your piece to the left or right.</p>
+            <p>Pressing the up arrow key rotates the piece.</p>
+            <p>You can make the piece fall faster by performing a Hard Drop or a Soft Drop</p>
+            <p>A Hard Drop is performed by pressing space bar. This will lock your piece into place and you'll be given a new piece.</p>
+            <p>To Soft Drop pressing the down arrow key. You can still move your piece when it makes contact with another piece or the bottom of the well for a short amount of time.</p>
+            <p>You can store a piece for later by pressing C on the key board. If another piece has already been stored you will switch the new piece for the stored piece</p>
+            <p>Your piece can't be switched out the same turn it was stored</p>         
+      </div>                
+      <button class='menu-button menu-font' id='desktop-controls-back-button'>BACK</button>  
+  </div>
       <div class='game-over-menu menu-font' id='game-over-menu'>
         <h1 class='menu-description' id='game-over-id'>GAME OVER</h1>
         <h3 class='menu-description' id='score-id'>SCORE: 10</h3>
