@@ -101,6 +101,8 @@ import {body,container,canvas,
   const newGame = () => {
     clearAllCanvas()
     piece = resetGame()
+    pointsHeading.innerText = 0
+    levelHeading.innerText = 'Level 1'
     currentState = 'playing'
     translucentMask.style.background = 'none'
     pauseButton.style.display = 'block'
@@ -221,6 +223,7 @@ import {body,container,canvas,
 
 
   const gameOverDisplay = () => {
+      console.log('over')
       gameOverMenu.style.display = 'flex'
       gameOverScore.innerText = `SCORE: ${points}`
   }
@@ -643,7 +646,10 @@ const keyHandler = (event) => {
         piece = swapHoldPiece(piece)
         break;
     case 'Escape':
-         currentState = 'playing' === currentState ? 'paused' : 'playing'        
+      if(currentState === 'playing'){
+        pauseGame() 
+      }
+               
     default:
       let idle = {x: 0, y: 0}
       piece = movePiece(piece, idle)
@@ -958,7 +964,7 @@ let phaseCoords = {x : 0,y : 0}
 
 const phaseWell = () => {
   if(phaseCount >= phaseSpeed){
-    phase(phaseCoords.x,phaseCoords.y)
+    
     phaseCount = 0
     phaseCoords.x = phaseCoords.x + 1
     if(phaseCoords.x > 9){
@@ -972,12 +978,12 @@ const phaseWell = () => {
       }
     }
   }
-  
+  phase(phaseCoords.x,phaseCoords.y)
   phaseCount++
 }
 
 const phase = (x,y) => {
-  if(gameWell[y][x]){
+  if(gameWell[y][x] !== null){
     vibrate()
     gameWell[y][x].color[3] = 0
     gameWell[y][x].topColor[3] = 0

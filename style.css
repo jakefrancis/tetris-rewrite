@@ -83,7 +83,7 @@ canvas{
 }
 
 
-.start-menu,.pause-menu,.confirmation-menu,.options-menu,.game-over-menum,.controls-menu,.mobile-controls-menu,.desktop-controls-menu{
+.start-menu,.pause-menu,.confirmation-menu,.options-menu,.game-over-menu,.controls-menu,.mobile-controls-menu,.desktop-controls-menu{
   background-color: #1865B5;
   position: absolute;
   border-radius: 2%;
