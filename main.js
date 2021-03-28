@@ -29,7 +29,7 @@ import {body,container,canvas,
   const listDescription = document.getElementsByClassName('list-wrapper')
   console.log(listDescription)
   for(let i = 0; i < listDescription.length; i++){
-    listDescription[i].style.fontSize = `${1.6 * altPx}px`
+    listDescription[i].style.fontSize = `${1.5 * altPx}px`
   }
 
   const backOptionsButton = document.getElementById('back-options-button')
@@ -620,57 +620,60 @@ const drawTop = (piece, context) =>{
 }
 
 const keyHandler = (event) => {
-  let key = event.key
-  console.log(key)
-  switch(key){
-    case 'ArrowDown':
-      let down =  {x: 0, y: 1}
-      piece = movePiece(piece, down)
-      timer = 0
-      break;
-    case 'ArrowRight':
-      if(!hardDropCommit){
-        let right =  {x: 1, y: 0}
-        piece = movePiece(piece, right)
-        ghostPiece = {...piece}
-      }   
-      break;
-    case 'ArrowLeft':
-      if(!hardDropCommit){
-        let left =  {x: -1, y: 0}
-        piece =  movePiece(piece, left)
-        ghostPiece = {...piece}
-      }      
-      break;
-    case 'ArrowUp':
-      if(!hardDropCommit){
-           piece = rotate(activePiece)
-        ghostPiece = {...piece}
-      }
-     
-         break;
-    case 'c':
-      if(!hardDropCommit){
-        piece = swapHoldPiece(piece)
-      }
-        
+  
+  if(currentState !== 'playing') return
+    let key = event.key
+    switch(key){
+      case 'ArrowDown':
+        let down =  {x: 0, y: 1}
+        piece = movePiece(piece, down)
+        timer = 0
         break;
-    case ' ':
-      if(!hardDropCommit){
-        piece = hardDrop(piece)  
-        hardDropCommit = true
-        timer = currentDifficulty
-      }        
+      case 'ArrowRight':
+        if(!hardDropCommit){
+          let right =  {x: 1, y: 0}
+          piece = movePiece(piece, right)
+          ghostPiece = {...piece}
+        }   
         break;
-    case 'Escape':
-      if(currentState === 'playing'){
-        pauseGame() 
-      }
-               
-    default:
-      let idle = {x: 0, y: 0}
-      piece = movePiece(piece, idle)
-  }
+      case 'ArrowLeft':
+        if(!hardDropCommit){
+          let left =  {x: -1, y: 0}
+          piece =  movePiece(piece, left)
+          ghostPiece = {...piece}
+        }      
+        break;
+      case 'ArrowUp':
+        if(!hardDropCommit){
+             piece = rotate(activePiece)
+          ghostPiece = {...piece}
+        }
+       
+           break;
+      case 'c':
+        if(!hardDropCommit){
+          piece = swapHoldPiece(piece)
+        }
+          
+          break;
+      case ' ':
+        if(!hardDropCommit){
+          piece = hardDrop(piece)  
+          hardDropCommit = true
+          timer = currentDifficulty
+        }        
+          break;
+      case 'Escape':
+        if(currentState === 'playing'){
+          pauseGame() 
+        }
+                 
+      default:
+        let idle = {x: 0, y: 0}
+        piece = movePiece(piece, idle)
+    }
+
+  
 }
 
 
@@ -687,7 +690,7 @@ wrapper.addEventListener('touchend', handleTouchEnd, false)
 wrapper.addEventListener('click',tapHandler)
 
 function tapHandler(event) {
-if(currentState === 'paused') return
+if(currentState !== 'playing') return
   if(!dropped){
     vibrate()
     event.preventDefault()
@@ -719,7 +722,8 @@ function handleTouchStart(evt) {
 }
 
 function handleTouchMove(evt) {
-  evt.preventDefault()
+
+  if(currentState !== 'playing') return
   setTimeout(() => {
     if (!xDown || !yDown) {
       return;
@@ -770,6 +774,7 @@ function handleTouchMove(evt) {
         lockDelay = 15
         yDown = 0
         xDown = 0
+        dirEnd = true
         vibrate(30)
       }    
       else if(yDiff < pxSize * -1 && direction === 'vertical'){
