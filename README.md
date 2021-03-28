@@ -8,9 +8,11 @@ Mobile and touch friendly.
 
 #### Desktop
 
-* Arrow Keys to move.
-* Space to Rotate.
+* Left and Right Arrow Keys to move.
+* Up Arrow key to Rotate.
 * C to hold piece.
+* Space for Hard Drop.
+* Down Arrow Key for Hard Drop
 
 #### Mobile
 
@@ -25,7 +27,7 @@ Mobile and touch friendly.
 
 Download repository and open index.html in a web browser
 
-Live site coming very soon
+[live](https://jake-tetris.netlify.app/)
 
 ## Features coming soon
 
