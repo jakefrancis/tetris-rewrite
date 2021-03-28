@@ -26,6 +26,11 @@ import {body,container,canvas,
   const controlsMenu = document.getElementById('controls-menu')
   const optionsMenu = document.getElementById('options-menu')
   const optionsButton = document.getElementById('options-main-button')
+  const listDescription = document.getElementsByClassName('list-wrapper')
+  console.log(listDescription)
+  for(let i = 0; i < listDescription.length; i++){
+    listDescription[i].style.fontSize = `${1.6 * altPx}px`
+  }
 
   const backOptionsButton = document.getElementById('back-options-button')
   const backPauseOptionsButton = document.getElementById('back-pause-options-button')
@@ -46,6 +51,16 @@ import {body,container,canvas,
   pauseIcon.style.width = `${2 * pxSize}px`
 
   const instructionsButton = document.getElementById('instructions-button')
+  const mobileControlsButton = document.getElementById('mobile-controls-button')
+  const desktopControlsButton = document.getElementById('desktop-controls-button')
+
+  const mobileControlsMenu = document.getElementById('mobile-controls-menu')
+  const desktopControlsMenu = document.getElementById('desktop-controls-menu')
+
+  const mobileControlsBackButton = document.getElementById('mobile-controls-back-button')
+  const desktopControlsBackButton = document.getElementById('desktop-controls-back-button')
+  
+
   const newGameButton = document.getElementById('new-game-button')
   const continueButton = document.getElementById('continue-button')
   const restartButton = document.getElementById('restart-button')
@@ -53,6 +68,7 @@ import {body,container,canvas,
   let vibrationOn = true
 
   if (!navigator.vibrate) {
+    optionsButton.style.display = 'none'
     vibrateButton.style.display = 'none'
     vibrationOn = false
   }
@@ -209,6 +225,38 @@ import {body,container,canvas,
 
   newGameOverButton.onclick = newGame
 
+  const displayMobileControls = () => {
+     controlsMenu.style.display = 'none'
+     mobileControlsMenu.style.display = 'flex'
+     vibrate()
+  }
+
+  mobileControlsButton.onclick = displayMobileControls
+
+  const mobileControlsBack = () => {
+    mobileControlsMenu.style.display = 'none'
+    controlsMenu.style.display = 'flex'
+    vibrate()
+  }
+
+  mobileControlsBackButton.onclick = mobileControlsBack
+
+  const displayDesktopControls = () => {
+    controlsMenu.style.display = 'none'
+    desktopControlsMenu.style.display = 'flex'
+    vibrate()
+ }
+
+ desktopControlsButton.onclick = displayDesktopControls
+
+
+ const desktopControlsBack = () => {
+  desktopControlsMenu.style.display = 'none'
+  controlsMenu.style.display = 'flex'
+  vibrate()
+}
+
+desktopControlsBackButton.onclick =  desktopControlsBack
 
 
 
