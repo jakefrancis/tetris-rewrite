@@ -67,6 +67,8 @@ import {body,container,canvas,
 
   let vibrationOn = true
 
+  //validates if browser is capable of handling the vibrate function
+  //disables the ability to toggle the vibrate function on and off
   if (!navigator.vibrate) {
     optionsButton.style.display = 'none'
     vibrateButton.style.display = 'none'
@@ -421,6 +423,7 @@ let piece = getIntialPieceCoords(activePiece)
 let nextPiece = pickRandomPiece(pieceBag)
 let next = getIntialPieceCoords(nextPiece, true)
 let ghostPiece = {...piece}
+let potentialHold = {...activePiece}
 let holdPiece = null
 let hold = null
 
@@ -430,6 +433,7 @@ let hold = null
 const pickNewPiece = (bag) => {
     pieceCoords = {...startingCoords}
     activePiece = {...nextPiece}
+    potentialHold = {...activePiece}
     nextPiece = pickRandomPiece(bag)
     pieceBag = fillBagIfEmpty(bag,pieces,2)
     next = getIntialPieceCoords(nextPiece,true)
@@ -446,7 +450,7 @@ const swapHoldPiece = (piece) => {
     if(holdPiece !== null){
       pieceCoords = {...startingCoords}
       let holdCopy = {...holdPiece}
-      holdPiece = {...activePiece}
+      holdPiece = {...potentialHold}
       activePiece = holdCopy
       hold = getIntialPieceCoords(holdPiece, true)
       piece = getIntialPieceCoords(activePiece)
@@ -455,7 +459,7 @@ const swapHoldPiece = (piece) => {
       return piece
     }
     else{
-      holdPiece = {...activePiece}
+      holdPiece = {...potentialHold}
       hold = getIntialPieceCoords(holdPiece,true)
       piece = pickNewPiece(pieceBag)
       held = true
