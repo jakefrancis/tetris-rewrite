@@ -629,21 +629,38 @@ const keyHandler = (event) => {
       timer = 0
       break;
     case 'ArrowRight':
-      let right =  {x: 1, y: 0}
-      piece = movePiece(piece, right)
-      ghostPiece = {...piece}
+      if(!hardDropCommit){
+        let right =  {x: 1, y: 0}
+        piece = movePiece(piece, right)
+        ghostPiece = {...piece}
+      }   
       break;
     case 'ArrowLeft':
+      if(!hardDropCommit){
         let left =  {x: -1, y: 0}
         piece =  movePiece(piece, left)
         ghostPiece = {...piece}
+      }      
       break;
-    case ' ':
-        piece = rotate(activePiece)
+    case 'ArrowUp':
+      if(!hardDropCommit){
+           piece = rotate(activePiece)
         ghostPiece = {...piece}
+      }
+     
          break;
     case 'c':
+      if(!hardDropCommit){
         piece = swapHoldPiece(piece)
+      }
+        
+        break;
+    case ' ':
+      if(!hardDropCommit){
+        piece = hardDrop(piece)  
+        hardDropCommit = true
+        timer = currentDifficulty
+      }        
         break;
     case 'Escape':
       if(currentState === 'playing'){
