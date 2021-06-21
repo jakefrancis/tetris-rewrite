@@ -11,7 +11,7 @@ html{
 }
 
 .translucent-mask{
-  height: 95vh;
+  height: 90vh;
   overflow: hidden;
   margin: 0 auto;
   max-width: 600px;
