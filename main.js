@@ -101,6 +101,7 @@ import {body,container,canvas,
   const newGame = () => {
     clearAllCanvas()
     piece = resetGame()
+    potentialHold = {...activePiece}
     pointsHeading.innerText = 0
     levelHeading.innerText = 'Level 1'
     currentState = 'playing'
@@ -695,8 +696,7 @@ if(currentState !== 'playing') return
     vibrate()
     event.preventDefault()
     piece = rotate(activePiece)
-    ghostPiece = {...piece}
-  } 
+    ghostPiece = {...piece}  } 
 }
 
 let xDown = null;
