@@ -101,6 +101,7 @@ import {body,container,canvas,
   const newGame = () => {
     clearAllCanvas()
     piece = resetGame()
+    potentialHold = {...activePiece}
     pointsHeading.innerText = 0
     levelHeading.innerText = 'Level 1'
     currentState = 'playing'
@@ -957,7 +958,6 @@ const resetGame = () => {
   pieceBag = fillBagIfEmpty(pieceBag,pieces,4)
   activePiece = pickRandomPiece(pieceBag)
   piece = getIntialPieceCoords(activePiece)
-  potentialHold = {...activePiece}
   nextPiece = pickRandomPiece(pieceBag)
   next = getIntialPieceCoords(nextPiece, true)
   held = false
