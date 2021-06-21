@@ -695,8 +695,7 @@ if(currentState !== 'playing') return
     vibrate()
     event.preventDefault()
     piece = rotate(activePiece)
-    ghostPiece = {...piece}
-  } 
+    ghostPiece = {...piece}  } 
 }
 
 let xDown = null;
@@ -958,6 +957,7 @@ const resetGame = () => {
   pieceBag = fillBagIfEmpty(pieceBag,pieces,4)
   activePiece = pickRandomPiece(pieceBag)
   piece = getIntialPieceCoords(activePiece)
+  potentialHold = {...activePiece}
   nextPiece = pickRandomPiece(pieceBag)
   next = getIntialPieceCoords(nextPiece, true)
   held = false
