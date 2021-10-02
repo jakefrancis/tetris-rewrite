@@ -27,7 +27,7 @@ Mobile and touch friendly.
 
 Download repository and open index.html in a web browser
 
-[Play Here](https://jake-tetris.netlify.app/)
+[Play Here](https://tetris.hellojake.com)
 
 ## Features coming soon
 
