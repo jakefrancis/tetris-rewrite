@@ -2,6 +2,8 @@
 
 The classic falling block game written in JS.
 
+Installable as a Progressive Web App. 
+
 Mobile and touch friendly. 
 
 ## Controls
@@ -32,7 +34,6 @@ Download repository and open index.html in a web browser
 ## Features coming soon
 
 * Locally stored High Scores
-* Conversion into an installable Progressive Web App
 
 ## Features coming not so soon
 
