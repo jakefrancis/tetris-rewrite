@@ -7,7 +7,24 @@ import {body,container,canvas,
   font,leftButton,rightButton,
   downButton,enterButton,rotateButton,
   escButton} from './src/dom.js'
+
+
+
 */
+
+
+
+
+window.onload = () => {
+
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+             .register('./sw.js');
+  }
+}
+
+
   import {colors,backgroundColor,pieces,pxSize,altPx,wellHeight,wellWidth} from './src/constants.js'
   //startScreenDisplay();
 
